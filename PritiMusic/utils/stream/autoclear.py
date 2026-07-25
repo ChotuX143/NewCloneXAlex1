@@ -1,8 +1,8 @@
 import os
 import time
 import asyncio
-import gc  
-import shutil 
+import gc
+import shutil
 import config
 from config import autoclean
 from PritiMusic import LOGGER, app
@@ -11,16 +11,21 @@ from pyrogram.types import Message
 
 # Settings
 WEEK_IN_SECONDS = 7 * 24 * 60 * 60
-ONE_DAY_IN_SECONDS = 24 * 60 * 60 
-FIVE_MINS_IN_SECONDS = 5 * 60 
-MAX_CACHE_SIZE = 5 * 1024 * 1024 * 1024  
-MAX_FILE_SIZE = 500 * 1024 * 1024 
+ONE_DAY_IN_SECONDS = 24 * 60 * 60
+ONE_MIN_IN_SECONDS = 60  # Welcome images ke liye 1 minute
+MAX_CACHE_SIZE = 5 * 1024 * 1024 * 1024  # 5 GB Total Cache
+MAX_FILE_SIZE = 500 * 1024 * 1024  # 500 MB Max File
+
+# Advanced Autoclean Thresholds
+AVG_SONG_SIZE = 10 * 1024 * 1024  # Maan lijiye 1 song approx 10MB ka hai
+BUFFER_SPACE = 15 * AVG_SONG_SIZE  # 15 songs ka space (~150MB)
+ADVANCED_THRESHOLD = MAX_CACHE_SIZE - BUFFER_SPACE  # Jab cache yahan tak pahuchega, cleaning shuru hogi
 
 async def auto_clean(popped):
     current_time = time.time()
     
     # ==========================================
-    # 1. IMAGE CLEANUP (Isolated to prevent breaking other processes)
+    # 1. IMAGE CLEANUP (Welcome Image 1-Minute Auto Delete)
     # ==========================================
     try:
         image_directory = "./downloads"
@@ -28,22 +33,22 @@ async def auto_clean(popped):
             for img_file in os.listdir(image_directory):
                 if img_file.lower().endswith((".png", ".jpg", ".jpeg")):
                     img_path = os.path.join(image_directory, img_file)
-                    # Check existence right before acting to avoid FileNotFoundError
+                    
                     if os.path.exists(img_path):
                         try:
                             img_age = current_time - os.path.getctime(img_path)
-                            if img_age > FIVE_MINS_IN_SECONDS:
+                            # Image ko 1 min (60 seconds) ke baad delete karna
+                            if img_age > ONE_MIN_IN_SECONDS:
                                 os.remove(img_path)
-                                LOGGER(__name__).info(f"🗑️ Auto-deleted old image: {img_file}")
+                                LOGGER(__name__).info(f"🗑️ Auto-deleted old image (1 min passed): {img_file}")
                         except Exception:
                             pass
-                # Yield control to event loop so bot doesn't freeze
                 await asyncio.sleep(0) 
     except Exception as e:
         LOGGER(__name__).error(f"Image Auto-Clean Error: {e}")
 
     # ==========================================
-    # 2. SONG CACHE CLEANUP
+    # 2. ADVANCED SONG CACHE CLEANUP
     # ==========================================
     if not popped:
         return
@@ -53,7 +58,6 @@ async def auto_clean(popped):
         if not rem:
             return
 
-        # Safe removal from autoclean list
         try:
             if rem in autoclean:
                 autoclean.remove(rem)
@@ -100,9 +104,12 @@ async def auto_clean(popped):
                         current_cache_size += f_size
                     except Exception:
                         pass
-            await asyncio.sleep(0) # Prevent Event Loop Blocking
+            await asyncio.sleep(0)
                 
+        # Age ke hisaab se sort karein (Oldest first)
         all_files.sort(key=lambda x: x["age"], reverse=True)
+        
+        deleted_in_adv_clean = 0
         
         # Delete old/extra files
         for f in all_files:
@@ -110,6 +117,20 @@ async def auto_clean(popped):
             if not os.path.exists(filepath):
                 continue
                 
+            # 🚀 ADVANCED AUTOCLEAN: Jab storage full hone wali ho (15 songs limit)
+            if current_cache_size > ADVANCED_THRESHOLD and deleted_in_adv_clean < 10:
+                if filepath not in autoclean:
+                    try:
+                        os.remove(filepath)
+                        deleted_files.append(f["name"])
+                        current_cache_size -= f["size"] 
+                        deleted_in_adv_clean += 1
+                        LOGGER(__name__).info(f"🗑️ Adv Clean - Deleted oldest song: {filepath}")
+                    except Exception:
+                        pass
+                    continue
+            
+            # Normal Weekly Auto-Clean Backup
             if (f["age"] > WEEK_IN_SECONDS or current_cache_size > MAX_CACHE_SIZE) and filepath not in autoclean:
                 try:
                     os.remove(filepath)
@@ -182,7 +203,6 @@ async def clean_dust_command(client, message: Message):
                             pass
                 await asyncio.sleep(0)
 
-        # GC is fine here because it is triggered manually by the owner, not automatically
         gc.collect()
 
         if deleted_count > 0:
