@@ -392,13 +392,16 @@ async def start_pm(client, message: Message, _):
             caption = custom_caption
     else:
         formatted_text = (
-            f"Hey {user_mention} 👋\n\n"
-            f"⦿ THIS IS {bot_mention} !\n\n"
-            f"➻ A FAST & POWERFUL TELEGRAM MUSIC PLAYER BOT.\n\n"
-            f"──────────────────\n"
-            f"✦ POWERED BY » {bot_mention}"
+            f"<blockquote><b>ʜєʏ ʙᴧʙʏ {user_mention}, 🥀</b></blockquote>\n"
+f"<blockquote expandable><b>ᴛʜɪs ɪs : {bot_mention}\n"
+f"sϻσσᴛʜ ʙєᴧᴛs • sᴛᴧʙʟє & sєᴧϻʟєss ϻυsɪᴄ ғʟσᴡ.\n"
+f"ηєᴡ ᴠєʀsɪση ᴡɪᴛʜ sυᴘєʀ ғᴧsᴛ ʏσυᴛυʙє ᴧᴘɪ ʙᴧsєᴅ.\n"
+f"•── ⋅ ⋅ ⋅ ────── ⋅ ⋅ ────── ⋅ ⋅ ⋅ ──•\n\n"
+f"υsє ᴛʜє ʜєʟᴘ ʙυᴛᴛση ᴛσ єxᴘʟσʀє ᴧʟʟ ғєᴧᴛυʀєs, ϻσᴅυʟєs & ᴄσϻϻᴧηᴅs єᴧsɪʟʏ.</b>\n"
+f"</blockquote>"
+                
         )
-        caption = f"<blockquote expandable>{formatted_text}</blockquote>"
+       # caption = f"<blockquote expandable>{formatted_text}</blockquote>"
 
     # 🔥 FIX: Removed message_effect_id entirely to prevent Pyrogram TypeError
     if start_video:
@@ -524,8 +527,16 @@ async def home_back_handler(client, CallbackQuery, _):
         except:
             caption = custom_caption
     else:
-        formatted_text = (f"Hey {user_mention} 👋\n\n⦿ THIS IS {bot_mention} !\n\n➻ A FAST & POWERFUL TELEGRAM MUSIC PLAYER BOT.\n\n──────────────────\n✦ POWERED BY » {bot_mention}")
-        caption = f"<blockquote expandable>{formatted_text}</blockquote>"
+        formatted_text = (
+    f"<b>ʜєʏ ʙᴧʙʏ {user_mention}, 🥀</b>\n\n"
+    f"<b>ᴛʜɪs ɪs : {bot_mention}\n"
+    f"sϻσσᴛʜ ʙєᴧᴛs • sᴛᴧʙʟє & sєᴧϻʟєss ϻυsɪᴄ ғʟσᴡ.\n"
+    f"ηєᴡ ᴠєʀsɪση ᴡɪᴛʜ sυᴘєʀ ғᴧsᴛ ʏσυᴛυʙє ᴧᴘɪ ʙᴧsєᴅ.\n"
+    f"•── ⋅ ⋅ ⋅ ────── ⋅ ⋅ ────── ⋅ ⋅ ⋅ ──•\n\n"
+    f"υsє ᴛʜє ʜєʟᴘ ʙυᴛᴛση ᴛσ єxᴘʟσʀє ᴧʟʟ ғєᴧᴛυʀєs, ϻσᴅυʟєs & ᴄσϻϻᴧηᴅs єᴧsɪʟʏ.</b>"
+)
+
+caption = f"<blockquote expandable>{formatted_text}</blockquote>"
 
     try:
         if start_video:
