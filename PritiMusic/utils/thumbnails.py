@@ -1,180 +1,260 @@
+import asyncio
 import os
 import re
+import uuid
+import math
 import random
 import aiofiles
 import aiohttp
-import math
-from PIL import (Image, ImageDraw, ImageEnhance, ImageFilter, ImageFont, ImageOps)
+from PIL import Image, ImageDraw, ImageEnhance, ImageFilter, ImageFont
 from youtubesearchpython.__future__ import VideosSearch
-from PritiMusic import app
 
-# --- HELPER FUNCTIONS ---
-def get_glowing_circle(image):
-    img = image.convert("RGBA")
-    size = min(img.size)
-    img = ImageOps.fit(img, (size, size), centering=(0.5, 0.5))
-    mask = Image.new("L", (size, size), 0)
-    ImageDraw.Draw(mask).ellipse((0, 0, size, size), fill=255)
-    circular_img = Image.new("RGBA", (size, size), (0, 0, 0, 0))
-    circular_img.paste(img, (0, 0), mask)
-    offset = 50
-    glow_size = size + (offset * 2)
-    glow = Image.new("RGBA", (glow_size, glow_size), (0, 0, 0, 0))
-    draw_glow = ImageDraw.Draw(glow)
-    draw_glow.ellipse((5, 5, glow_size-5, glow_size-5), fill=(255, 255, 0, 60))
-    draw_glow.ellipse((15, 15, glow_size-15, glow_size-15), fill=(255, 255, 255, 80))
-    draw_glow.ellipse((25, 25, glow_size-25, glow_size-25), fill=(255, 105, 180, 150))
-    draw_glow.ellipse((35, 35, glow_size-35, glow_size-35), fill=(255, 255, 255, 200))
-    glow = glow.filter(ImageFilter.GaussianBlur(15))
-    draw_border = ImageDraw.Draw(glow)
-    draw_border.ellipse((offset - 4, offset - 4, size + offset + 4, size + offset + 4), outline="white", width=8)
-    glow.paste(circular_img, (offset, offset), circular_img)
-    return glow, offset
+# PritiMusic/Clone Bot configuration imports
+from config import YOUTUBE_IMG_URL
 
-def draw_text_with_glow(draw, position, text, font, fill, glow_fill):
-    # Safe check for None strings
-    safe_text = str(text) if text else "Unknown"
-    x, y = position
-    for dx, dy in [(-3, 0), (3, 0), (0, -3), (0, 3)]:
-        draw.text((x + dx, y + dy), safe_text, font=font, fill=glow_fill)
-    draw.text((x, y), safe_text, font=font, fill=fill)
+# 🟢 IMPORT ERROR FIX: Agar CACHE_DIR dir.py mein nahi mila, toh crash nahi hoga
+try:
+    from PritiMusic.core.dir import CACHE_DIR
+except ImportError:
+    CACHE_DIR = "cache"
 
-async def download_user_photo(user_id):
+LOGGER = __import__('logging').getLogger(__name__)
+
+# 🟢 PILLOW COMPATIBILITY FIX
+try:
+    LANCZOS = Image.Resampling.LANCZOS
+except AttributeError:
+    LANCZOS = Image.LANCZOS
+
+# Paths to your assets
+TITLE_FONT_PATH = "PritiMusic/assets/font2.ttf"
+META_FONT_PATH = "PritiMusic/assets/font.ttf"
+CANVAS_SIZE = (1280, 720)
+
+TEXT_GRAY = (180, 180, 180)
+WHITE = (255, 255, 255)
+
+# 🎨 PREDEFINED PREMIUM GLOW COLORS
+NEON_COLORS = [
+    (255, 40, 130),   # Neon Pink
+    (0, 204, 255),    # Sky Blue
+    (255, 220, 0),    # Neon Yellow
+    (20, 100, 255)    # Neon Blue
+]
+
+# ----------------- HELPER FUNCTIONS ----------------- #
+
+def fit_cover(image, size):
+    ratio = max(size[0] / image.size[0], size[1] / image.size[1])
+    new_size = (int(image.size[0] * ratio), int(image.size[1] * ratio))
+    resized = image.resize(new_size, LANCZOS)
+    
+    left = (new_size[0] - size[0]) // 2
+    top = (new_size[1] - size[1]) // 2
+    right = left + size[0]
+    bottom = top + size[1]
+    
+    return resized.crop((left, top, right, bottom))
+
+def get_mask(size, radius, antialias=4):
+    mask = Image.new("L", (size[0] * antialias, size[1] * antialias), 0)
+    ImageDraw.Draw(mask).rounded_rectangle((0, 0, size[0] * antialias, size[1] * antialias), radius=radius * antialias, fill=255)
+    return mask.resize(size, LANCZOS)
+
+def load_font(path, size):
     try:
-        async for photo in app.get_chat_photos(user_id, limit=1):
-            return await app.download_media(photo.file_id, file_name=f"cache/{user_id}.jpg")
-    except: return None
-    return None
+        return ImageFont.truetype(path, size)
+    except Exception:
+        return ImageFont.load_default()
 
-# --- MAIN THUMBNAIL FUNCTION ---
-async def get_thumb(videoid, user_id, user_name):
-    os.makedirs("cache", exist_ok=True)
-    final_path = f"cache/{videoid}_{user_id}.png"
-    if os.path.exists(final_path): return final_path
+def format_views(view_count_str):
+    try:
+        views_num = int(re.sub(r"\D", "", str(view_count_str)))
+        if views_num >= 1_000_000_000:
+            return f"{views_num / 1_000_000_000:.1f} B"
+        elif views_num >= 1_000_000:
+            return f"{views_num // 1_000_000} M"
+        elif views_num >= 1_000:
+            return f"{views_num // 1_000} K"
+        return str(views_num)
+    except:
+        return "Unknown"
 
-    temp_path = f"cache/temp_{videoid}.jpg"
-    bg = None
+def trim_text(text: str, limit: int) -> str:
+    clean_text = " ".join(str(text or "").split())
+    if len(clean_text) <= limit:
+        return clean_text
+    return clean_text[: max(limit - 3, 0)].rstrip() + "..."
+    
+def draw_exact_icons(draw, cx, cy, icon, fill=WHITE):
+    if icon == "prev":
+        draw.polygon([(cx + 12, cy - 14), (cx - 2, cy), (cx + 12, cy + 14)], fill=fill)
+        draw.polygon([(cx - 2, cy - 14), (cx - 16, cy), (cx - 16, cy + 14)], fill=fill)
+        draw.rounded_rectangle([(cx - 22, cy - 14), (cx - 16, cy + 14)], radius=2, fill=fill)
+    elif icon == "pause":
+        draw.rounded_rectangle([(cx - 12, cy - 16), (cx - 4, cy + 16)], radius=3, fill=fill)
+        draw.rounded_rectangle([(cx + 4, cy - 16), (cx + 12, cy + 16)], radius=3, fill=fill)
+    elif icon == "next":
+        draw.polygon([(cx - 12, cy - 14), (cx + 2, cy), (cx - 12, cy + 14)], fill=fill)
+        draw.polygon([(cx + 2, cy - 14), (cx + 16, cy), (cx + 16, cy + 14)], fill=fill)
+        draw.rounded_rectangle([(cx + 16, cy - 14), (cx + 22, cy + 14)], radius=2, fill=fill)
+        # ----------------- MAIN THUMBNAIL GENERATOR ----------------- #
+
+async def get_thumb(videoid, user_id=None, app=None):
+    """
+    Main function used by PritiMusic to generate premium UI thumbnails.
+    """
+    os.makedirs(CACHE_DIR, exist_ok=True)
+    cache_path = os.path.join(CACHE_DIR, f"{videoid}_{user_id}_premium_v6.png")
+    
+    if os.path.isfile(cache_path):
+        return cache_path
+
+    url = f"https://www.youtube.com/watch?v={videoid}"
+    unique_id = uuid.uuid4().hex[:8]
+    temp_thumb_path = os.path.join(CACHE_DIR, f"temp_{videoid}_{unique_id}.png")
 
     try:
-        results = VideosSearch(f"https://www.youtube.com/watch?v={videoid}", limit=1)
-        data = await results.next()
-        result = data["result"][0]
-        
-        # 🚀 FIX: Prevent NoneType string concatenation error
-        raw_title = result.get("title", "Unknown Title")
-        title = re.sub(r"\W+", " ", str(raw_title)).title() if raw_title else "Unknown Title"
-        
-        duration = str(result.get("duration", "00:00"))
-        views = str(result.get("viewCount", {}).get("short", "Unknown"))
-        channel = str(result.get("channel", {}).get("name", "Unknown Artist"))
-        
-        # 🚀 FIX: Check if thumbnails exist before downloading
-        try:
-            if result.get("thumbnails") and len(result["thumbnails"]) > 0:
-                thumb_url = result["thumbnails"][0]["url"].split("?")[0]
-                async with aiohttp.ClientSession() as session:
-                    async with session.get(thumb_url) as resp:
-                        if resp.status == 200:
-                            f = await aiofiles.open(temp_path, mode="wb")
-                            await f.write(await resp.read())
-                            await f.close()
-        except Exception as e:
-            print(f"Failed to fetch thumbnail image from Youtube: {e}")
+        results = VideosSearch(url, limit=1)
+        results_data = (await results.next()).get("result", [])
+        if not results_data:
+            return YOUTUBE_IMG_URL
 
-        # 🚀 FIX: Prevent PIL "Cannot identify image file" error
-        try:
-            if os.path.exists(temp_path) and os.path.getsize(temp_path) > 0:
-                bg = Image.open(temp_path).convert("RGBA").resize((1920, 1080))
-            else:
-                bg = Image.new("RGBA", (1920, 1080), (30, 30, 30, 255))
-        except Exception as e:
-            print(f"PIL Image Read Error: {e} -> Using fallback background.")
-            bg = Image.new("RGBA", (1920, 1080), (30, 30, 30, 255))
+        result = results_data[0]
+        title = trim_text(re.sub(r"[^\w\s&\-']", " ", result.get("title", "")).strip(), 28)
+        duration = str(result.get("duration") or "00:00")
+        views_str = format_views((result.get("viewCount") or {}).get("text") or "0")
+        channel = trim_text(str((result.get("channel") or {}).get("name") or "Unknown Artist"), 20)
+        
+        thumbnails = result.get("thumbnails", [{}])
+        thumbnail_url = thumbnails[-1].get("url", thumbnails[0].get("url", "")).split("?")[0]
 
-        background = bg.filter(ImageFilter.GaussianBlur(25)).point(lambda p: p * 0.35)
-        
-        black_card = Image.new("RGBA", background.size, (0, 0, 0, 0))
-        draw_card = ImageDraw.Draw(black_card)
-        draw_card.rounded_rectangle((40, 40, 1880, 940), radius=60, fill=(0, 0, 0, 255), outline=(132, 224, 240, 200), width=6)
-        background = Image.alpha_composite(background, black_card)
-        draw = ImageDraw.Draw(background, "RGBA")
-        
-        try:
-            f1 = ImageFont.truetype("PritiMusic/assets/font.ttf", 65)
-            f2 = ImageFont.truetype("PritiMusic/assets/font2.ttf", 45)
-            br = ImageFont.truetype("PritiMusic/assets/font2.ttf", 55)
-            f_small = ImageFont.truetype("PritiMusic/assets/font2.ttf", 30)
-        except:
-            f1 = f2 = br = f_small = ImageFont.load_default()
+        async with aiohttp.ClientSession(headers={"User-Agent": "Mozilla/5.0"}) as session:
+            async with session.get(thumbnail_url) as resp:
+                if resp.status == 200:
+                    async with aiofiles.open(temp_thumb_path, mode="wb") as f:
+                        await f.write(await resp.read())
+                else:
+                    return YOUTUBE_IMG_URL
 
-        # Images
-        try:
-            yt_img_glowing, yt_offset = get_glowing_circle(bg.resize((500, 500)))
-            background.paste(yt_img_glowing, (80 - yt_offset, 250 - yt_offset), yt_img_glowing)
-        except Exception as e:
-            print(f"Error drawing YT circle: {e}")
+        source_image = Image.open(temp_thumb_path).convert("RGBA")
         
-        u_photo = await download_user_photo(user_id)
-        if u_photo and os.path.exists(u_photo):
+        theme_color = random.choice(NEON_COLORS)
+        glow_color = (*theme_color, 160)
+
+        background = fit_cover(source_image, CANVAS_SIZE)
+        
+        background = background.filter(ImageFilter.GaussianBlur(65))
+        background = ImageEnhance.Brightness(background).enhance(0.20)
+        background = ImageEnhance.Color(background).enhance(1.2)
+        scene = background.copy()
+        
+        # 🟢 Fonts (Size thoda badhaya gaya hai Bold look ke liye)
+        font_title = load_font(TITLE_FONT_PATH, 46)
+        font_stats_label = load_font(META_FONT_PATH, 34)
+        font_stats_value = load_font(TITLE_FONT_PATH, 34)
+        font_pill = load_font(TITLE_FONT_PATH, 26)
+        font_time = load_font(META_FONT_PATH, 24)
+
+        # 1. LEFT SIDE: SQUARE ART CARD WITH SELECTED GLOW
+        art_size = 520 
+        art_x, art_y = 70, 100
+        
+        glow_layer = Image.new("RGBA", CANVAS_SIZE, (0, 0, 0, 0))
+        glow_draw = ImageDraw.Draw(glow_layer)
+        glow_spread = 25 
+        glow_draw.rounded_rectangle(
+            [(art_x - glow_spread, art_y - glow_spread), (art_x + art_size + glow_spread, art_y + art_size + glow_spread)],
+            radius=45, fill=glow_color
+        )
+        glow_layer = glow_layer.filter(ImageFilter.GaussianBlur(50))
+        scene.paste(glow_layer, (0, 0), glow_layer)
+        
+        art_content = fit_cover(source_image, (art_size, art_size))
+        art_mask = get_mask((art_size, art_size), 35)
+        scene.paste(art_content, (art_x, art_y), art_mask)
+        draw = ImageDraw.Draw(scene, "RGBA")
+        
+        draw.rounded_rectangle([(art_x, art_y), (art_x + art_size, art_y + art_size)], radius=35, outline=theme_color, width=5)
+
+        # 2. RIGHT SIDE: NOW PLAYING PILL (Bold Text)
+        right_x = 650
+        pill_w = 230
+        pill_h = 45
+        draw.rounded_rectangle([(right_x, art_y), (right_x + pill_w, art_y + pill_h)], radius=20, fill=theme_color)
+        # stroke_width=1 makes it look bold
+        draw.text((right_x + 30, art_y + 6), "NOW PLAYING", fill=(0, 0, 0), font=font_pill, stroke_width=1, stroke_fill=(0, 0, 0))
+
+        # 3. TITLE & NEON LINE (Bold Title)
+        title_y = art_y + 80
+        # stroke_width=2 for the Title to make it extra thick like "Heroine"
+        draw.text((right_x, title_y), title, fill=WHITE, font=font_title, stroke_width=2, stroke_fill=WHITE)
+        draw.line([(right_x, title_y + 65), (1200, title_y + 65)], fill=theme_color, width=4)
+
+        # 4. STATS (Bold Labels & Values)
+        stat_y = title_y + 110
+        spacing = 55
+        
+        draw.text((right_x, stat_y), "Duration:", fill=TEXT_GRAY, font=font_stats_label, stroke_width=1, stroke_fill=TEXT_GRAY)
+        draw.text((right_x + 180, stat_y), duration, fill=theme_color, font=font_stats_value, stroke_width=1, stroke_fill=theme_color)
+        
+        draw.text((right_x, stat_y + spacing), "Views:", fill=TEXT_GRAY, font=font_stats_label, stroke_width=1, stroke_fill=TEXT_GRAY)
+        draw.text((right_x + 180, stat_y + spacing), f"{views_str} views", fill=theme_color, font=font_stats_value, stroke_width=1, stroke_fill=theme_color)
+        
+        draw.text((right_x, stat_y + spacing*2), "Artist:", fill=TEXT_GRAY, font=font_stats_label, stroke_width=1, stroke_fill=TEXT_GRAY)
+        draw.text((right_x + 180, stat_y + spacing*2), f"{channel}", fill=theme_color, font=font_stats_value, stroke_width=1, stroke_fill=theme_color)
+
+        # 5. GLOWING PROGRESS BAR
+        bar_y = stat_y + spacing*3 + 30
+        bar_w = 550
+        prog_w = int(bar_w * 0.20) 
+        
+        draw.rounded_rectangle([(right_x, bar_y), (right_x + bar_w, bar_y + 8)], radius=3, fill=(255, 255, 255, 40))
+        
+        bar_glow = Image.new("RGBA", CANVAS_SIZE, (0, 0, 0, 0))
+        bar_glow_draw = ImageDraw.Draw(bar_glow)
+        bar_glow_draw.rounded_rectangle([(right_x, bar_y - 2), (right_x + prog_w, bar_y + 10)], radius=4, fill=theme_color)
+        bar_glow = bar_glow.filter(ImageFilter.GaussianBlur(8))
+        scene.paste(bar_glow, (0, 0), bar_glow)
+        
+        draw = ImageDraw.Draw(scene, "RGBA") 
+        draw.rounded_rectangle([(right_x, bar_y), (right_x + prog_w, bar_y + 8)], radius=3, fill=theme_color)
+        draw.ellipse([(right_x + prog_w - 9, bar_y - 6), (right_x + prog_w + 9, bar_y + 14)], fill=WHITE)
+        
+        # Bold Time Texts
+        draw.text((right_x, bar_y + 22), "00:00", fill=WHITE, font=font_time, stroke_width=1, stroke_fill=WHITE)
+        
+        try:
+            dur_w = draw.textlength(duration, font=font_time)
+        except AttributeError:
             try:
-                u_img_blurred = Image.open(u_photo).resize((450, 450)).filter(ImageFilter.GaussianBlur(6))
-                u_img_glowing, u_offset = get_glowing_circle(u_img_blurred)
-                background.paste(u_img_glowing, (1350 - u_offset, 250 - u_offset), u_img_glowing)
-            except Exception as e:
-                print(f"Error processing User Photo: {e}")
+                dur_w = draw.textsize(duration, font=font_time)[0]
+            except AttributeError:
+                dur_w = 40
+                
+        draw.text((right_x + bar_w - dur_w, bar_y + 22), duration, fill=WHITE, font=font_time, stroke_width=1, stroke_fill=WHITE)
 
-        # Texts
-        safe_title = (title[:22] + "...") if len(title) > 22 else title
-        draw.text((650, 300), safe_title, fill="white", font=f1)
-        draw.text((650, 400), f"Artist: {channel}", fill=(200, 200, 200), font=f2)
-        draw.text((650, 470), f"Views: {views}", fill=(150, 150, 150), font=f2)
-        draw.text((650, 530), f"Duration: {duration}", fill=(150, 150, 150), font=f2)
+        # 6. MEDIA CONTROLS
+        ctrl_y = bar_y + 70
+        draw_exact_icons(draw, right_x + 220, ctrl_y, "prev", fill=WHITE)
+        draw_exact_icons(draw, right_x + 275, ctrl_y, "pause", fill=theme_color)
+        draw_exact_icons(draw, right_x + 330, ctrl_y, "next", fill=WHITE)
 
-        # --- UNIFORM DYNAMIC WAVEFORM ---
-        bar_count = 64; bar_width = 5; bar_gap = 12
-        total_width = bar_count * bar_gap
-        start_x = (1920 - total_width) / 2; base_y = 760 
-        
-        random.seed(videoid) 
-        for i in range(bar_count):
-            h = random.randint(15, 45) 
-            x0 = start_x + (i * bar_gap); x1 = x0 + bar_width
-            y0 = base_y - h; y1 = base_y + h
-            fill_color = (255, 255, 255, 255) if i < (bar_count // 2) else (150, 150, 150, 200)
-            if x1 > x0: draw.rounded_rectangle((x0, y0, x1, y1), radius=3, fill=fill_color)
+        try:
+            if os.path.exists(temp_thumb_path):
+                os.remove(temp_thumb_path)
+        except:
+            pass
 
-        # --- PROGRESS LINE & ICONS ---
-        line_y = base_y + 55
-        draw.line([(start_x, line_y), (start_x + total_width, line_y)], fill=(80, 80, 80), width=1)
-        draw.line([(start_x, line_y), (start_x + (total_width // 2), line_y)], fill=(255, 255, 255), width=2)
-        draw.ellipse(((start_x + total_width // 2) - 8, line_y - 8, (start_x + total_width // 2) + 8, line_y + 8), fill="white")
-        draw.text((start_x, line_y + 20), "00:00", fill="white", font=f_small)
-        draw.text((start_x + total_width - 80, line_y + 20), duration, fill="white", font=f_small)
+        scene.save(cache_path)
+        return cache_path
 
-        ctrl_y = line_y + 50 
-        mid_x = 960
-        
-        # Play / Pause Icon
-        draw.ellipse((mid_x - 30, ctrl_y - 30, mid_x + 30, ctrl_y + 30), outline="white", width=3)
-        draw.polygon([(mid_x - 8, ctrl_y - 12), (mid_x + 14, ctrl_y), (mid_x - 8, ctrl_y + 12)], fill="white")
-        
-        # Previous / Next Icons
-        draw.ellipse((mid_x - 80, ctrl_y - 20, mid_x - 45, ctrl_y + 20), outline="white", width=2)
-        draw.ellipse((mid_x + 45, ctrl_y - 20, mid_x + 80, ctrl_y + 20), outline="white", width=2)
-
-        # Branding
-        draw_text_with_glow(draw, (80, 975), "BETA BOT HUB", br, (132, 224, 240), (0, 255, 255, 100))
-        draw_text_with_glow(draw, (1480, 975), "THE SHIV", br, (255, 60, 160), (255, 0, 170, 100))
-
-        background.convert("RGB").save(final_path, "PNG")
-        return final_path
     except Exception as e:
-        print(f"Thumbnail General Error: {e}")
-        return None
-    finally:
-        if os.path.exists(temp_path): 
-            try: os.remove(temp_path)
-            except: pass
-        if 'u_photo' in locals() and u_photo and os.path.exists(u_photo): 
-            try: os.remove(u_photo)
-            except: pass
+        LOGGER.error(f"Thumbnail Error: {e}")
+        try:
+            if os.path.exists(temp_thumb_path):
+                os.remove(temp_thumb_path)
+        except:
+            pass
+        return YOUTUBE_IMG_URL
+        
