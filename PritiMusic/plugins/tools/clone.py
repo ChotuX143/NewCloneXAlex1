@@ -61,17 +61,17 @@ FOOTER = (
     "✨ **Start customizing your bot now! join **\n"
     "📢 Update: @betabot_hub\n"
     "🌚 Support: @betabot_support\n"
-    "😎 OWNER: @Sukoon_s"
+    "😎 OWNER: @ll_alexx_lll"
 )
 
 try:
     from config import BOT_LINK
 except ImportError:
-    BOT_LINK = "https://t.me/clone_MUSICrobot"
+    BOT_LINK = "https://t.me/SizzuMusicBot"
 
 C_BOT_COMMANDS = [
-    {"command": "/clone", "description": "ᴄʟᴏɴᴇs ʏᴏᴜʀ ᴏᴡɴ ᴍᴜsɪᴄ ʙᴏᴛ"},
     {"command": "/start", "description": "sᴛᴀʀᴛs ᴛʜᴇ ᴍᴜsɪᴄ ʙᴏᴛ"},
+    {"command": "/clone", "description": "ᴄʟᴏɴᴇs ʏᴏᴜʀ ᴏᴡɴ ᴍᴜsɪᴄ ʙᴏᴛ"},
     {"command": "/help", "description": "ɢᴇᴛ ʜᴇʟᴩ ᴍᴇɴᴜ ᴡɪᴛʜ ᴇxᴩʟᴀɴᴀᴛɪᴏɴ ᴏғ ᴄᴏᴍᴍᴀɴᴅs."},
     {"command": "/play", "description": "sᴛᴀʀᴛs sᴛʀᴇᴀᴍɪɴɢ ᴛʜᴇ ʀᴇǫᴜᴇsᴛᴇᴅ ᴛʀᴀᴄᴋ ᴏɴ ᴠɪᴅᴇᴏᴄʜᴀᴛ."},
     {"command": "/pause", "description": "ᴩᴀᴜsᴇ ᴛʜᴇ ᴄᴜʀʀᴇɴᴛ ᴩʟᴀʏɪɴɢ sᴛʀᴇᴀᴍ."},
@@ -87,7 +87,7 @@ def get_random_start_img():
         if isinstance(START_IMG_URL, list):
             return random.choice(START_IMG_URL)
         return START_IMG_URL
-    return "https://files.catbox.moe/zbl2i7.jpg"
+    return "https://h.uguu.se/YuxBXDBH.jpg"
 
 # --- 🔥 MUST JOIN (FORCE SUBSCRIBE) CHECKER FOR NEW CLONES ONLY 🔥 ---
 async def check_fsub(client, user_id):
