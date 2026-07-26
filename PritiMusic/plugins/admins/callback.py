@@ -4,6 +4,8 @@ import math
 from pyrogram.types import CallbackQuery, InputMediaPhoto, InputMediaVideo, InlineKeyboardButton, InlineKeyboardMarkup
 from pyrogram import filters
 from pyrogram.errors import WebpageMediaEmpty
+# Import ButtonStyle for dynamic colors (requires a fork like Kurigram)
+from pyrogram.enums import ButtonStyle 
 
 from PritiMusic import YouTube, app
 from PritiMusic.core.call import Lucky
@@ -30,6 +32,12 @@ from PritiMusic.utils.inline.start import private_panel
 
 checker = {}
 upvoters = {}
+
+# 🎨 Dynamic Color Generator
+def get_style_map():
+    styles = [ButtonStyle.PRIMARY, ButtonStyle.SUCCESS, ButtonStyle.DANGER]
+    random.shuffle(styles)
+    return {1: styles[0], 2: styles[1], 3: styles[2], 4: styles[0]}
 
 # --- BACK BUTTON HANDLER ---
 @app.on_callback_query(filters.regex("settingsback_helper") & ~BANNED_USERS)
@@ -58,14 +66,15 @@ async def settings_back_helper(client, CallbackQuery, _):
 @languageCB
 async def clone_page_cb(client, CallbackQuery, _):
     await CallbackQuery.answer()
+    style_map = get_style_map()
     clone_text = (
-        "**ᴍᴀᴋᴇ ʏᴏᴜʀ ᴏᴡɴ ᴍᴜsɪᴄ ʙᴏᴛ ᴡᴀᴛᴄʜɪɴɢ ᴛʜᴇ ᴠɪᴅᴇᴏ ᴄᴀʀᴇғᴜʟʟʏ.**\n\n"
-        "<blockquote><b><u>ᴄʟᴏɴᴇ ᴄᴏᴍᴍᴀɴᴅs :</u></b>\n\n"
-        "<b><u>ᴀʟʟ ᴜsᴇʀs :</u></b>\n"
-        "/clone – <b>ᴄʟᴏɴᴇ ʏᴏᴜʀ ᴏᴡɴ ʙᴏᴛ ᴜsɪɴɢ ʙᴏᴛ ᴛᴏᴋᴇɴ ғʀᴏᴍ @BotFather.</b>\n"
-        "<b>ᴇxᴀᴍᴘʟᴇ:</b> /clone <code>ᴘᴀsᴛᴇ_ᴛᴏᴋᴇɴ_ʜᴇʀᴇ</code>\n\n"
-        "/rmbot – <b>ᴅᴇʟᴇᴛᴇ ʏᴏᴜʀ ᴄʟᴏɴᴇᴅ ʙᴏᴛ.</b>\n\n"
-        "/mybot – <b>ᴄʜᴇᴄᴋ ᴛʜᴇ ʙᴏᴛs ʏᴏᴜ'ᴠᴇ ᴄʟᴏɴᴇᴅ.</b></blockquote>"
+        "<b>ϻᴧᴋє ʏσυʀ σᴡη ϻυsɪᴄ ʙσᴛ ᴡᴧᴛᴄʜɪηɢ ᴛʜє ᴠɪᴅєσ ᴄᴧʀєғυʟʟʏ.</b>\n\n"
+        "<blockquote><b><u>ᴄʟσηє ᴄσϻϻᴧηᴅs :</u></b>\n\n"
+        "<b><u>ᴧʟʟ υsєʀs :</u></b>\n"
+        "/clone – <b>ᴄʟσηє ʏσυʀ σᴡη ʙσᴛ υsɪηɢ ʙσᴛ ᴛσᴋєη ғʀσϻ @BotFather.</b>\n"
+        "<b>єxᴧϻᴘʟє:</b> /clone <code>ᴘᴧsᴛє_ᴛσᴋєη_ʜєʀє</code>\n\n"
+        "/rmbot – <b>ᴅєʟєᴛє ʏσυʀ ᴄʟσηєᴅ ʙσᴛ.</b>\n\n"
+        "/mybot – <b>ᴄʜєᴄᴋ ᴛʜє ʙσᴛs ʏσυ'ᴠє ᴄʟσηєᴅ.</b></blockquote>"
     )
     await CallbackQuery.edit_message_media(
         media=InputMediaPhoto(
@@ -74,7 +83,7 @@ async def clone_page_cb(client, CallbackQuery, _):
         ),
         reply_markup=InlineKeyboardMarkup(
             [
-                [InlineKeyboardButton(text="⌯ ʙᴀᴄᴋ ⌯", callback_data="settingsback_helper")]
+                [InlineKeyboardButton(text="⌯ ʙᴧᴄᴋ ⌯", callback_data="settingsback_helper", style=style_map[1])]
             ]
         )
     )
@@ -84,22 +93,23 @@ async def clone_page_cb(client, CallbackQuery, _):
 @languageCB
 async def support_page_cb(client, CallbackQuery, _):
     await CallbackQuery.answer()
+    style_map = get_style_map()
     support_text = (
-        "**✨ ᴡᴇʟᴄᴏᴍᴇ ᴛᴏ ᴛʜᴇ sᴜᴘᴘᴏʀᴛ ᴍᴇɴᴜ ✨**\n\n"
-        "ɪғ ʏᴏᴜ ɴᴇᴇᴅ ᴀɴʏ ʜᴇʟᴘ ʀᴇɢᴀʀᴅɪɴɢ ᴛʜᴇ ʙᴏᴛ ᴏʀ ᴡᴀɴᴛ ᴛᴏ ʀᴇᴘᴏʀᴛ ᴀ ʙᴜɢ, "
-        "ᴊᴏɪɴ ᴏᴜʀ sᴜᴘᴘᴏʀᴛ ᴄʜᴀᴛ ᴏʀ ᴄʜᴀɴɴᴇʟ ʙᴇʟᴏᴡ."
+        f"<blockquote><b>✨ ᴡєʟᴄσϻє ᴛσ ᴛʜє sυᴘᴘσʀᴛ ϻєηυ ✨</b>\n\n"
+        f"<b>ɪғ ʏσυ ηєєᴅ ᴧηʏ ʜєʟᴘ ʀєɢᴧʀᴅɪηɢ ᴛʜє ʙσᴛ σʀ ᴡᴧηᴛ ᴛσ ʀєᴘσʀᴛ ᴧ ʙυɢ, "
+        f"ᴊσɪη συʀ sυᴘᴘσʀᴛ ᴄʜᴧᴛ σʀ ᴄʜᴧηηєʟ ʙєʟσᴡ.</b></blockquote>"
     )
 
     custom_support_buttons = [
         [
-            InlineKeyboardButton(text="📢 ᴜᴘᴅᴀᴛᴇs", url="https://t.me/betabot_hub"),
-            InlineKeyboardButton(text="💬 sᴜᴘᴘᴏʀᴛ", url="https://t.me/betabot_support")
+            InlineKeyboardButton(text="📢 υᴘᴅᴧᴛєs", url="https://t.me/betabot_hub", style=style_map[1]),
+            InlineKeyboardButton(text="💬 sυᴘᴘσʀᴛ", url="https://t.me/betabot_support", style=style_map[2])
         ],
         [
-            InlineKeyboardButton(text="❤️ ʙᴏᴛs", url="https://t.me/betabot_hub/6701")
+            InlineKeyboardButton(text="❤️ ʙσᴛs", url="https://t.me/betabot_hub/6701", style=style_map[3])
         ],
         [
-            InlineKeyboardButton(text="⌯ ʙᴀᴄᴋ ⌯", callback_data="settingsback_helper")
+            InlineKeyboardButton(text="⌯ ʙᴧᴄᴋ ⌯", callback_data="settingsback_helper", style=style_map[4])
         ]
     ]
 
@@ -111,22 +121,22 @@ async def support_page_cb(client, CallbackQuery, _):
         reply_markup=InlineKeyboardMarkup(custom_support_buttons)
     )
 
-# --- SOURCE PAGE (UPDATED TO PHOTO) ---
+# --- SOURCE PAGE ---
 @app.on_callback_query(filters.regex("gib_source"))
 async def gib_repo_callback(_, callback_query):
     try:
-        image_url = "https://files.catbox.moe/10zwqs.jpg"
-
+        image_url = "https://h.uguu.se/eJnvkhyK.jpg"
+        style_map = get_style_map()
         await callback_query.edit_message_media(
             media=InputMediaPhoto(
                 media=image_url, 
-                caption="REPO = ||ɪsᴛᴋʜᴀʀ and  ᴅᴇᴠɪʟ ᴋᴏ ᴘᴀᴘᴀ ʙᴏʟ ᴄʜᴀʟ ʙᴏʟ😎||"
+                caption=f"<blockquote><b>📂 ʀєᴘσ = ||ɪsᴛᴋʜᴧʀ ᴧηᴅ ᴅєᴠɪʟ ᴋσ ᴘᴧᴘᴧ ʙσʟ ᴄʜᴧʟ ʙσʟ😎||</b></blockquote>"
             ),
             reply_markup=InlineKeyboardMarkup(
                 [
                     [
-                        InlineKeyboardButton(text="• ʙᴀᴄᴋ •", callback_data="settingsback_helper"),
-                        InlineKeyboardButton(text="• ᴄʟᴏsᴇ •", callback_data="close")
+                        InlineKeyboardButton(text="• ʙᴧᴄᴋ •", callback_data="settingsback_helper", style=style_map[1]),
+                        InlineKeyboardButton(text="• ᴄʟσsє •", callback_data="close", style=style_map[2])
                     ]
                 ]
             ),
@@ -140,9 +150,9 @@ async def unban_assistant(_, callback: CallbackQuery):
     userbot = await get_assistant(chat_id)
     try:
         await app.unban_chat_member(chat_id, userbot.id)
-        await callback.answer("Assistant Unbanned Successfully!", show_alert=True)
+        await callback.answer("ᴧssɪsᴛᴧηᴛ υηʙᴧηηєᴅ sυᴄᴄєssғυʟʟʏ!", show_alert=True)
     except Exception:
-        await callback.answer("Failed to unban. Give me Admin permissions.", show_alert=True)
+        await callback.answer("ғᴧɪʟєᴅ ᴛσ υηʙᴧη. ɢɪᴠє ϻє ᴧᴅϻɪη ᴘєʀϻɪssɪσηs.", show_alert=True)
 
 # --- ADMIN COMMANDS ---
 @app.on_callback_query(filters.regex("ADMIN") & ~BANNED_USERS)
@@ -159,6 +169,7 @@ async def del_back_playlist(client, CallbackQuery, _):
     if not await is_active_chat(chat_id):
         return await CallbackQuery.answer(_["general_5"], show_alert=True)
     mention = CallbackQuery.from_user.mention
+    style_map = get_style_map()
 
     if command == "UpVote":
         if chat_id not in votemode: votemode[chat_id] = {}
@@ -194,13 +205,14 @@ async def del_back_playlist(client, CallbackQuery, _):
             except:
                 pass
             command = counter
-            mention = "ᴜᴘᴠᴏᴛᴇs"
+            mention = "υᴘᴠσᴛєs"
         else:
             if CallbackQuery.from_user.id in upvoters[chat_id][CallbackQuery.message.id]:
                 await CallbackQuery.answer(_["admin_38"], show_alert=True)
             else:
                 await CallbackQuery.answer(_["admin_39"], show_alert=True)
-            upl = InlineKeyboardMarkup([[InlineKeyboardButton(text=f"👍 {get_upvotes}", callback_data=f"ADMIN  UpVote|{chat_id}_{counter}")]])
+
+            upl = InlineKeyboardMarkup([[InlineKeyboardButton(text=f"👍 {get_upvotes}", callback_data=f"ADMIN  UpVote|{chat_id}_{counter}", style=style_map[1])]])
             await CallbackQuery.answer(_["admin_40"], show_alert=True)
             return await CallbackQuery.edit_message_reply_markup(reply_markup=upl)
     else:
@@ -235,25 +247,26 @@ async def del_back_playlist(client, CallbackQuery, _):
         state = await is_autoplay_group(chat_id)
         if state:
             await remove_autoplay_group(chat_id)
-            await CallbackQuery.answer("🔴 Autoplay Disabled!", show_alert=True)
+            await CallbackQuery.answer("🔴 ᴧυᴛσᴘʟᴧʏ ᴅɪsᴧʙʟєᴅ!", show_alert=True)
             await CallbackQuery.message.reply_text(
-                f"**🎧 𝐀ᴜᴛᴏᴘʟᴀʏ 𝐒ʏsᴛᴇᴍ**\n\nᴀᴜᴛᴏᴘʟᴀʏ ғᴏʀ ᴛʜɪs ɢʀᴏᴜᴘ ɪs ɴᴏᴡ **ᴅɪsᴀʙʟᴇᴅ 🔴**.\n└ ʙʏ : {mention}",
+                f"<blockquote><b>🔴 🎧 ᴧυᴛσᴘʟᴧʏ sʏsᴛєϻ</b>\n\n<b>ᴧυᴛσᴘʟᴧʏ ғσʀ ᴛʜɪs ɢʀσυᴘ ɪs ησᴡ ᴅɪsᴧʙʟєᴅ 🔴.</b>\n└ <b>ʙʏ :</b> {mention}</blockquote>",
                  reply_markup=close_markup(_)
             )
         else:
             await add_autoplay_group(chat_id)
-            await CallbackQuery.answer("🟢 Autoplay Enabled!", show_alert=True)
+            await CallbackQuery.answer("🟢 ᴧυᴛσᴘʟᴧʏ єηᴧʙʟєᴅ!", show_alert=True)
             await CallbackQuery.message.reply_text(
-                f"🎧 𝐀ᴜᴛᴏᴘʟᴀʏ 𝐒ʏsᴛᴇᴍ\n\nᴀᴜᴛᴏᴘʟᴀʏ ғᴏʀ ᴛʜɪs ɢʀᴏᴜᴘ ɪs ɴᴏᴡ ᴇɴᴀʙʟᴇᴅ 🟢.\n└ ʙʏ : {mention}",
+                f"<blockquote><b>🟢 🎧 ᴧυᴛσᴘʟᴧʏ sʏsᴛєϻ</b>\n\n<b>ᴧυᴛσᴘʟᴧʏ ғσʀ ᴛʜɪs ɢʀσυᴘ ɪs ησᴡ єηᴧʙʟєᴅ 🟢.</b>\n└ <b>ʙʏ :</b> {mention}</blockquote>",
                   reply_markup=close_markup(_)
             )
 
     elif command == "Skip" or command == "Replay":
         check = db.get(chat_id)
         if not check or len(check) == 0:
-            return await CallbackQuery.answer("ǫᴜᴇᴜᴇ ɪs ᴇᴍᴘᴛʏ ᴏʀ ᴛʜᴇ ᴘʟᴀʏʟɪsᴛ ʜᴀs ʙᴇᴇɴ ᴄʟᴇᴀʀᴇᴅ!", show_alert=True)
+            return await CallbackQuery.answer("ǫυєυє ɪs єϻᴘᴛʏ σʀ ᴛʜє ᴘʟᴧʏʟɪsᴛ ʜᴧs ʙєєη ᴄʟєᴧʀєᴅ!", show_alert=True)
+
         if command == "Skip":
-            txt = f"➻ sᴛʀᴇᴀᴍ sᴋɪᴩᴩᴇᴅ 🎄\n│ \n└ʙʏ : {mention} 🥀"
+            txt = f"<blockquote><b>⏭ ➻ sᴛʀєᴧϻ sᴋɪᴘᴘєᴅ 🎄</b>\n│ \n└<b>ʙʏ :</b> {mention} 🥀</blockquote>"
             try:
                 popped = check.pop(0)
                 if popped: await auto_clean(popped)
@@ -264,7 +277,7 @@ async def del_back_playlist(client, CallbackQuery, _):
             except:
                 return await Lucky.stop_stream(chat_id)
         else:
-            txt = f"➻ sᴛʀᴇᴀᴍ ʀᴇ-ᴘʟᴀʏᴇᴅ 🎄\n│ \n└ʙʏ : {mention} 🥀"
+            txt = f"<blockquote><b>⏪ ➻ sᴛʀєᴧϻ ʀє-ᴘʟᴧʏєᴅ 🎄</b>\n│ \n└<b>ʙʏ :</b> {mention} 🥀</blockquote>"
 
         await CallbackQuery.answer()
         queued = check[0]["file"]
@@ -334,5 +347,5 @@ asyncio.create_task(markup_timer())
 # --- YAHAN SE FILE ID NIKALNE WALA CODE START HOTA HAI ---
 @app.on_message(filters.video & filters.private)
 async def get_my_own_file_id(client, message):
-    await message.reply_text(f"**Mera Video File ID (Isko Copy Karo):**\n`{message.video.file_id}`")
-# --- YAHAN KHATAM ---
+    await message.reply_text(f"<blockquote><b>🎨 ϻєʀᴧ ᴠɪᴅєσ ғɪʟє ɪᴅ (ɪsᴋσ ᴄσᴘʏ ᴋᴧʀσ) :</b>\n<code>{message.video.file_id}</code></blockquote>")
+        
