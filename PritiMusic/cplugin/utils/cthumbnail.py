@@ -1,168 +1,156 @@
+import asyncio
 import os
 import re
+import uuid
+import math
 import random
 import aiofiles
 import aiohttp
-import math
-from PIL import (Image, ImageDraw, ImageEnhance, ImageFilter, ImageFont, ImageOps)
-
-# Nayi library yahan update kar di gayi hai 👇
+from PIL import Image, ImageDraw, ImageEnhance, ImageFilter, ImageFont
 from youtubesearchpython.__future__ import VideosSearch
-from PritiMusic import app
-from PritiMusic.utils.database import clonebotdb
+from config import YOUTUBE_IMG_URL
 
-# --- HELPER FUNCTIONS ---
-def get_glowing_circle(image):
-    img = image.convert("RGBA")
-    size = min(img.size)
-    img = ImageOps.fit(img, (size, size), centering=(0.5, 0.5))
-    mask = Image.new("L", (size, size), 0)
-    ImageDraw.Draw(mask).ellipse((0, 0, size, size), fill=255)
-    
-    circular_img = Image.new("RGBA", (size, size), (0, 0, 0, 0))
-    circular_img.paste(img, (0, 0), mask)
-    
-    offset = 50
-    glow_size = size + (offset * 2)
-    glow = Image.new("RGBA", (glow_size, glow_size), (0, 0, 0, 0))
-    draw_glow = ImageDraw.Draw(glow)
-    
-    draw_glow.ellipse((5, 5, glow_size-5, glow_size-5), fill=(255, 255, 0, 60))
-    draw_glow.ellipse((15, 15, glow_size-15, glow_size-15), fill=(255, 255, 255, 80))
-    draw_glow.ellipse((25, 25, glow_size-25, glow_size-25), fill=(255, 105, 180, 150))
-    draw_glow.ellipse((35, 35, glow_size-35, glow_size-35), fill=(255, 255, 255, 200))
-    glow = glow.filter(ImageFilter.GaussianBlur(15))
-    
-    draw_border = ImageDraw.Draw(glow)
-    draw_border.ellipse((offset - 4, offset - 4, size + offset + 4, size + offset + 4), outline="white", width=8)
-    glow.paste(circular_img, (offset, offset), circular_img)
-    return glow, offset
+try:
+    from PritiMusic.core.dir import CACHE_DIR
+except ImportError:
+    CACHE_DIR = "cache"
 
-def clear(text, max_length=25):
-    text = text.strip()
-    return text[:max_length].rstrip() + "..." if len(text) > max_length else text
+LOGGER = __import__('logging').getLogger(__name__)
 
-async def download_user_photo(user_id):
+try:
+    LANCZOS = Image.Resampling.LANCZOS
+except AttributeError:
+    LANCZOS = Image.LANCZOS
+
+TITLE_FONT_PATH = "PritiMusic/assets/font2.ttf"
+META_FONT_PATH = "PritiMusic/assets/font.ttf"
+CANVAS_SIZE = (1280, 720)
+TEXT_GRAY = (180, 180, 180)
+WHITE = (255, 255, 255)
+NEON_COLORS = [(255, 40, 130), (0, 204, 255), (255, 220, 0), (20, 100, 255)]
+
+def fit_cover(image, size):
+    ratio = max(size[0] / image.size[0], size[1] / image.size[1])
+    new_size = (int(image.size[0] * ratio), int(image.size[1] * ratio))
+    resized = image.resize(new_size, LANCZOS)
+    left = (new_size[0] - size[0]) // 2
+    top = (new_size[1] - size[1]) // 2
+    return resized.crop((left, top, left + size[0], top + size[1]))
+
+def get_mask(size, radius, antialias=4):
+    mask = Image.new("L", (size[0] * antialias, size[1] * antialias), 0)
+    ImageDraw.Draw(mask).rounded_rectangle((0, 0, size[0] * antialias, size[1] * antialias), radius=radius * antialias, fill=255)
+    return mask.resize(size, LANCZOS)
+
+def load_font(path, size):
+    try: return ImageFont.truetype(path, size)
+    except: return ImageFont.load_default()
+
+def format_views(view_count_str):
     try:
-        async for photo in app.get_chat_photos(user_id, limit=1):
-            return await app.download_media(photo.file_id, file_name=f"cache/{user_id}.jpg")
-    except: 
-        return None
-    return None
+        views_num = int(re.sub(r"\D", "", str(view_count_str)))
+        if views_num >= 1000000000: return f"{views_num / 1000000000:.1f} B"
+        elif views_num >= 1000000: return f"{views_num // 1000000} M"
+        elif views_num >= 1000: return f"{views_num // 1000} K"
+        return str(views_num)
+    except: return "Unknown"
 
-# --- MAIN THUMBNAIL FUNCTION ---
-async def get_thumb(videoid, user_id, client):
-    # Fetching Bot and Owner details
-    me = await client.get_me()
-    bot_name = me.first_name.upper() if me.first_name else "MUSIC BOT"
-    bot_id = me.id
-    owner_name = "ADMIN"
-    
-    try:
-        bot_data = await clonebotdb.find_one({"bot_id": bot_id})
-        if bot_data and bot_data.get("user_id"):
-            owner = await client.get_users(bot_data.get("user_id"))
-            owner_name = owner.first_name.upper() if owner.first_name else "OWNER"
-    except Exception as e: 
-        owner_name = "ADMIN"
+def trim_text(text: str, limit: int) -> str:
+    clean_text = " ".join(str(text or "").split())
+    if len(clean_text) <= limit: return clean_text
+    return clean_text[: max(limit - 3, 0)].rstrip() + "..."
 
-    os.makedirs("cache", exist_ok=True)
-    filename = f"cache/{videoid}_{bot_id}.png"
-    if os.path.isfile(filename): 
-        return filename
+def draw_exact_icons(draw, cx, cy, icon, fill=WHITE):
+    if icon == "prev":
+        draw.polygon([(cx + 12, cy - 14), (cx - 2, cy), (cx + 12, cy + 14)], fill=fill)
+        draw.polygon([(cx - 2, cy - 14), (cx - 16, cy), (cx - 16, cy + 14)], fill=fill)
+        draw.rounded_rectangle([(cx - 22, cy - 14), (cx - 16, cy + 14)], radius=2, fill=fill)
+    elif icon == "pause":
+        draw.rounded_rectangle([(cx - 12, cy - 16), (cx - 4, cy + 16)], radius=3, fill=fill)
+        draw.rounded_rectangle([(cx + 4, cy - 16), (cx + 12, cy + 16)], radius=3, fill=fill)
+    elif icon == "next":
+        draw.polygon([(cx - 12, cy - 14), (cx + 2, cy), (cx - 12, cy + 14)], fill=fill)
+        draw.polygon([(cx + 2, cy - 14), (cx + 16, cy), (cx + 16, cy + 14)], fill=fill)
+        draw.rounded_rectangle([(cx + 16, cy - 14), (cx + 22, cy + 14)], radius=2, fill=fill)
 
-    results = VideosSearch(f"https://www.youtube.com/watch?v={videoid}", limit=1)
-    data = await results.next()
-    result = data["result"][0]
-    title = re.sub(r"\W+", " ", result["title"]).title()
-    duration = result.get("duration", "00:00")
-    views = result.get("viewCount", {}).get("short", "Unknown")
-    channel = result.get("channel", {}).get("name", "Unknown Artist")
-    
-    async with aiohttp.ClientSession() as session:
-        async with session.get(result["thumbnails"][0]["url"].split("?")[0]) as resp:
-            f = await aiofiles.open(f"cache/temp_{videoid}.jpg", mode="wb")
-            await f.write(await resp.read())
-            await f.close()
+async def get_thumb(videoid, user_id=None, app=None):
+    os.makedirs(CACHE_DIR, exist_ok=True)
+    cache_path = os.path.join(CACHE_DIR, f"{videoid}_{user_id}_premium_v6.png")
+    if os.path.isfile(cache_path): return cache_path
 
-    bg = Image.open(f"cache/temp_{videoid}.jpg").convert("RGBA").resize((1920, 1080))
-    background = bg.filter(ImageFilter.GaussianBlur(25)).point(lambda p: p * 0.4)
-    
-    black_card = Image.new("RGBA", background.size, (0, 0, 0, 0))
-    draw_card = ImageDraw.Draw(black_card)
-    draw_card.rounded_rectangle((40, 40, 1880, 940), radius=60, fill=(0, 0, 0, 255), outline=(132, 224, 240, 200), width=6)
-    background = Image.alpha_composite(background, black_card)
-    draw = ImageDraw.Draw(background)
+    url = f"https://www.youtube.com/watch?v={videoid}"
+    unique_id = uuid.uuid4().hex[:8]
+    temp_thumb_path = os.path.join(CACHE_DIR, f"temp_{videoid}_{unique_id}.png")
 
     try:
-        f1 = ImageFont.truetype("PritiMusic/assets/font.ttf", 65)
-        f2 = ImageFont.truetype("PritiMusic/assets/font2.ttf", 45)
-        br = ImageFont.truetype("PritiMusic/assets/font2.ttf", 50)
-        f_small = ImageFont.truetype("PritiMusic/assets/font2.ttf", 30)
-    except:
-        f1 = f2 = br = f_small = ImageFont.load_default()
+        results = VideosSearch(url, limit=1)
+        results_data = (await results.next()).get("result", [])
+        if not results_data: return YOUTUBE_IMG_URL
+        result = results_data[0]
+        title = trim_text(re.sub(r"[^\w\s&\-']", " ", result.get("title", "")).strip(), 28)
+        duration = str(result.get("duration") or "00:00")
+        views_str = format_views((result.get("viewCount") or {}).get("text") or "0")
+        channel = trim_text(str((result.get("channel") or {}).get("name") or "Unknown Artist"), 20)
+        thumbnail_url = result.get("thumbnails", [{}])[-1].get("url", "").split("?")[0]
 
-    # --- BRANDING & TOP TEXT (BOT NAME & OWNER NAME) ---
-    bot_text = f"BOT: {bot_name}"
-    owner_text = f"OWNER: {owner_name}"
-    
-    # Left Aligned Bot Name
-    draw.text((80, 60), bot_text, fill="#FFFF00", font=br) # Yellow color
-    
-    # Right Aligned Owner Name (Automatically adjusts based on text length)
-    try:
-        owner_w = br.getlength(owner_text)
-    except AttributeError:
-        # Fallback for older PIL versions
-        owner_w = draw.textsize(owner_text, font=br)[0] if hasattr(draw, 'textsize') else 400
+        async with aiohttp.ClientSession(headers={"User-Agent": "Mozilla/5.0"}) as session:
+            async with session.get(thumbnail_url) as resp:
+                if resp.status == 200:
+                    async with aiofiles.open(temp_thumb_path, mode="wb") as f:
+                        await f.write(await resp.read())
+                else: return YOUTUBE_IMG_URL
+
+        source_image = Image.open(temp_thumb_path).convert("RGBA")
+        theme_color = random.choice(NEON_COLORS)
+        glow_color = (*theme_color, 160)
+        background = fit_cover(source_image, CANVAS_SIZE).filter(ImageFilter.GaussianBlur(65))
+        background = ImageEnhance.Brightness(background).enhance(0.20)
+        scene = background.copy()
         
-    draw.text((1840 - owner_w, 60), owner_text, fill="#00FFFF", font=br) # Cyan color
+        font_title = load_font(TITLE_FONT_PATH, 42)
+        font_stats_label = load_font(TITLE_FONT_PATH, 32)
+        font_stats_value = load_font(TITLE_FONT_PATH, 32)
+        font_pill = load_font(TITLE_FONT_PATH, 24)
+        font_time = load_font(TITLE_FONT_PATH, 22)
 
-    # --- IMAGES ---
-    yt_img_glowing, yt_offset = get_glowing_circle(bg.resize((500, 500)))
-    background.paste(yt_img_glowing, (80 - yt_offset, 250 - yt_offset), yt_img_glowing)
-    
-    u_photo = await download_user_photo(user_id)
-    if u_photo:
-        # Yahan par GaussianBlur(6) apply kiya gaya hai 👇
-        u_img_blurred = Image.open(u_photo).resize((450, 450)).filter(ImageFilter.GaussianBlur(6))
-        u_img_glowing, u_offset = get_glowing_circle(u_img_blurred)
-        background.paste(u_img_glowing, (1350 - u_offset, 250 - u_offset), u_img_glowing)
+        art_size, art_x, art_y = 520, 70, 100
+        glow_layer = Image.new("RGBA", CANVAS_SIZE, (0, 0, 0, 0))
+        glow_draw = ImageDraw.Draw(glow_layer)
+        glow_draw.rounded_rectangle([(art_x-25, art_y-25), (art_x+art_size+25, art_y+art_size+25)], radius=45, fill=glow_color)
+        scene.paste(glow_layer.filter(ImageFilter.GaussianBlur(50)), (0, 0), glow_layer)
+        scene.paste(fit_cover(source_image, (art_size, art_size)), (art_x, art_y), get_mask((art_size, art_size), 35))
+        draw = ImageDraw.Draw(scene, "RGBA")
+        draw.rounded_rectangle([(art_x, art_y), (art_x + art_size, art_y + art_size)], radius=35, outline=theme_color, width=5)
 
-    draw.text((650, 300), clear(title, 25), fill="white", font=f1)
-    draw.text((650, 400), f"Artist: {channel}", fill=(200, 200, 200), font=f2)
-    draw.text((650, 470), f"Views: {views}", fill=(150, 150, 150), font=f2)
-    draw.text((650, 530), f"Duration: {duration}", fill=(150, 150, 150), font=f2)
+        right_x = 650
+        draw.rounded_rectangle([(right_x, art_y), (right_x + 230, art_y + 45)], radius=20, fill=theme_color)
+        draw.text((right_x + 30, art_y + 6), "NOW PLAYING", fill=(0, 0, 0), font=font_pill)
+        draw.text((right_x, art_y + 80), title, fill=WHITE, font=font_title)
+        draw.line([(right_x, art_y + 140), (1200, art_y + 140)], fill=theme_color, width=3)
 
-    # --- UNIFORM WAVEFORM ---
-    bar_count = 64; bar_width = 4; bar_gap = 10
-    total_width = bar_count * bar_gap
-    start_x = (1920 - total_width) / 2; base_y = 780
-    for i in range(bar_count):
-        dist_from_center = abs(i - (bar_count / 2))
-        h = 35 if dist_from_center < 5 else 20
-        x0 = start_x + (i * bar_gap); y0 = base_y - h; x1 = x0 + bar_width; y1 = base_y + h
-        fill_color = (255, 255, 255, 255) if i < (bar_count // 2) else (150, 150, 150, 200)
-        draw.rounded_rectangle((x0, y0, x1, y1), radius=2, fill=fill_color)
+        stat_y = art_y + 190
+        draw.text((right_x, stat_y), "Duration:", fill=TEXT_GRAY, font=font_stats_label)
+        draw.text((right_x + 180, stat_y), duration, fill=theme_color, font=font_stats_value)
+        draw.text((right_x, stat_y + 55), "Views:", fill=TEXT_GRAY, font=font_stats_label)
+        draw.text((right_x + 180, stat_y + 55), f"{views_str} views", fill=theme_color, font=font_stats_value)
+        draw.text((right_x, stat_y + 110), "Player:", fill=TEXT_GRAY, font=font_stats_label)
+        draw.text((right_x + 180, stat_y + 110), f"@{channel}", fill=theme_color, font=font_stats_value)
 
-    # --- PROCESSING LINE & ICONS ---
-    line_y = base_y + 60
-    draw.line([(start_x, line_y), (start_x + total_width, line_y)], fill=(100, 100, 100), width=1)
-    draw.line([(start_x, line_y), (start_x + (total_width // 2), line_y)], fill=(255, 255, 255), width=2)
-    thumb_x = start_x + (total_width // 2)
-    draw.ellipse((thumb_x - 8, line_y - 8, thumb_x + 8, line_y + 8), fill="white")
-    draw.ellipse((thumb_x - 3, line_y - 3, thumb_x + 3, line_y + 3), fill=(0, 0, 0))
-    
-    draw.text((start_x, line_y + 20), "00:00", fill="white", font=f_small)
-    draw.text((start_x + total_width - 80, line_y + 20), duration, fill="white", font=f_small)
+        bar_y = stat_y + 190
+        draw.rounded_rectangle([(right_x, bar_y), (right_x + 550, bar_y + 8)], radius=3, fill=(255, 255, 255, 40))
+        draw.rounded_rectangle([(right_x, bar_y), (right_x + 110, bar_y + 8)], radius=3, fill=theme_color)
+        draw.ellipse([(right_x + 101, bar_y - 6), (right_x + 119, bar_y + 14)], fill=WHITE)
+        draw.text((right_x, bar_y + 22), "00:00", fill=WHITE, font=font_time)
+        draw.text((right_x + 510, bar_y + 22), duration, fill=WHITE, font=font_time)
 
-    ctrl_y = line_y + 50; mid_x = 960 # Higher up
-    draw.ellipse((mid_x - 25, ctrl_y - 25, mid_x + 25, ctrl_y + 25), outline="white", width=2)
-    draw.polygon([(mid_x - 6, ctrl_y - 10), (mid_x + 10, ctrl_y), (mid_x - 6, ctrl_y + 10)], fill="white")
-    draw.ellipse((mid_x - 60, ctrl_y - 15, mid_x - 35, ctrl_y + 15), outline="white", width=1)
-    draw.ellipse((mid_x + 35, ctrl_y - 15, mid_x + 60, ctrl_y + 15), outline="white", width=1)
+        draw_exact_icons(draw, right_x + 220, bar_y + 70, "prev")
+        draw_exact_icons(draw, right_x + 275, bar_y + 70, "pause", fill=theme_color)
+        draw_exact_icons(draw, right_x + 330, bar_y + 70, "next")
 
-    background.convert("RGB").save(filename)
-    if os.path.exists(f"cache/temp_{videoid}.jpg"): os.remove(f"cache/temp_{videoid}.jpg")
-    if u_photo and os.path.exists(u_photo): os.remove(u_photo)
-    return filename
+        if os.path.exists(temp_thumb_path): os.remove(temp_thumb_path)
+        scene.save(cache_path)
+        return cache_path
+    except Exception as e:
+        LOGGER.error(f"Thumbnail Error: {e}")
+        return YOUTUBE_IMG_URL
+        
