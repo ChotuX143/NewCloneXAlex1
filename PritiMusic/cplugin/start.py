@@ -391,17 +391,16 @@ async def start_pm(client, message: Message, _):
         except:
             caption = custom_caption
     else:
-        formatted_text = (
+        # ✅ FIX: Indentation is now perfectly aligned to prevent Pyrogram/Python crash
+        caption = (
             f"<blockquote><b>ʜєʏ ʙᴧʙʏ {user_mention}, 🥀</b></blockquote>\n"
-f"<blockquote expandable><b>ᴛʜɪs ɪs : {bot_mention}\n"
-f"sϻσσᴛʜ ʙєᴧᴛs • sᴛᴧʙʟє & sєᴧϻʟєss ϻυsɪᴄ ғʟσᴡ.\n"
-f"ηєᴡ ᴠєʀsɪση ᴡɪᴛʜ sυᴘєʀ ғᴧsᴛ ʏσυᴛυʙє ᴧᴘɪ ʙᴧsєᴅ.\n"
-f"•── ⋅ ⋅ ⋅ ────── ⋅ ⋅ ────── ⋅ ⋅ ⋅ ──•\n\n"
-f"υsє ᴛʜє ʜєʟᴘ ʙυᴛᴛση ᴛσ єxᴘʟσʀє ᴧʟʟ ғєᴧᴛυʀєs, ϻσᴅυʟєs & ᴄσϻϻᴧηᴅs єᴧsɪʟʏ.</b>\n"
-f"</blockquote>"
-                
+            f"<blockquote expandable><b>ᴛʜɪs ɪs : {bot_mention}\n"
+            f"sϻσσᴛʜ ʙєᴧᴛs • sᴛᴧʙʟє & sєᴧϻʟєss ϻυsɪᴄ ғʟσᴡ.\n"
+            f"ηєᴡ ᴠєʀsɪση ᴡɪᴛʜ sυᴘєʀ ғᴧsᴛ ʏσυᴛυʙє ᴧᴘɪ ʙᴧsєᴅ.\n"
+            f"•── ⋅ ⋅ ⋅ ────── ⋅ ⋅ ────── ⋅ ⋅ ⋅ ──•\n\n"
+            f"υsє ᴛʜє ʜєʟᴘ ʙυᴛᴛση ᴛσ єxᴘʟσʀє ᴧʟʟ ғєᴧᴛυʀєs, ϻσᴅυʟєs & ᴄσϻϻᴧηᴅs єᴧsɪʟʏ.</b>\n"
+            f"</blockquote>"
         )
-       # caption = f"<blockquote expandable>{formatted_text}</blockquote>"
 
     # 🔥 FIX: Removed message_effect_id entirely to prevent Pyrogram TypeError
     if start_video:
@@ -527,16 +526,16 @@ async def home_back_handler(client, CallbackQuery, _):
         except:
             caption = custom_caption
     else:
+        # ✅ FIX: Indentation is properly aligned here as well
         formatted_text = (
-    f"<b>ʜєʏ ʙᴧʙʏ {user_mention}, 🥀</b>\n\n"
-    f"<b>ᴛʜɪs ɪs : {bot_mention}\n"
-    f"sϻσσᴛʜ ʙєᴧᴛs • sᴛᴧʙʟє & sєᴧϻʟєss ϻυsɪᴄ ғʟσᴡ.\n"
-    f"ηєᴡ ᴠєʀsɪση ᴡɪᴛʜ sυᴘєʀ ғᴧsᴛ ʏσυᴛυʙє ᴧᴘɪ ʙᴧsєᴅ.\n"
-    f"•── ⋅ ⋅ ⋅ ────── ⋅ ⋅ ────── ⋅ ⋅ ⋅ ──•\n\n"
-    f"υsє ᴛʜє ʜєʟᴘ ʙυᴛᴛση ᴛσ єxᴘʟσʀє ᴧʟʟ ғєᴧᴛυʀєs, ϻσᴅυʟєs & ᴄσϻϻᴧηᴅs єᴧsɪʟʏ.</b>"
-)
-
-caption = f"<blockquote expandable>{formatted_text}</blockquote>"
+            f"<b>ʜєʏ ʙᴧʙʏ {user_mention}, 🥀</b>\n\n"
+            f"<b>ᴛʜɪs ɪs : {bot_mention}\n"
+            f"sϻσσᴛʜ ʙєᴧᴛs • sᴛᴧʙʟє & sєᴧϻʟєss ϻυsɪᴄ ғʟσᴡ.\n"
+            f"ηєᴡ ᴠєʀsɪση ᴡɪᴛʜ sυᴘєʀ ғᴧsᴛ ʏσυᴛυʙє ᴧᴘɪ ʙᴧsєᴅ.\n"
+            f"•── ⋅ ⋅ ⋅ ────── ⋅ ⋅ ────── ⋅ ⋅ ⋅ ──•\n\n"
+            f"υsє ᴛʜє ʜєʟᴘ ʙυᴛᴛση ᴛσ єxᴘʟσʀє ᴧʟʟ ғєᴧᴛυʀєs, ϻσᴅυʟєs & ᴄσϻϻᴧηᴅs єᴧsɪʟʏ.</b>"
+        )
+        caption = f"<blockquote expandable>{formatted_text}</blockquote>"
 
     try:
         if start_video:
@@ -776,3 +775,4 @@ async def set_btn_pos_cmd(client, message):
         await message.reply_text(f"✅ Button Position: **{raw_pos}**")
     else:
         await message.reply_text("❌ Invalid! Use: UP, DOWN, MID")
+    
