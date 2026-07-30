@@ -15,7 +15,7 @@ OWNER_USERNAME = getenv("OWNER_USERNAME", "")
 BOT_USERNAME = getenv("BOT_USERNAME", "")
 BOT_NAME = getenv("BOT_NAME", "")
 ASSUSERNAME = getenv("ASSUSERNAME", "")
-BOT_LINK = getenv("BOT_LINK", "https://t.me/royal_musics_bot")
+BOT_LINK = getenv("BOT_LINK", "https://t.me/TomXClonerBot")
 
 MONGO_DB_URI = getenv("MONGO_DB_URI")
 
@@ -41,37 +41,37 @@ INFLEX_API_KEY = getenv("INFLEX_API_KEY", "INFLEX40920628D")
 
 
 
-DURATION_LIMIT_MIN = int(getenv("DURATION_LIMIT", 17000))
+DURATION_LIMIT_MIN = int(getenv("DURATION_LIMIT", 17000000))
 
 LOGGER_ID = int(getenv("LOGGER_ID", "0"))
-LOGGER_2_ID = int(getenv("LOGGER_2_ID", "-1003255930328"))
+LOGGER_2_ID = int(getenv("LOGGER_2_ID", "-1002645692318"))
 CLONE_LOGGER = LOGGER_ID
-CLONE_LOGGER_2 = int(getenv("CLONE_LOGGER_2", "-1003255930328")) # ✅ Yahan naya Log Group 2 add kiya hai
+CLONE_LOGGER_2 = int(getenv("CLONE_LOGGER_2", "-1002645692318")) # ✅ Yahan naya Log Group 2 add kiya hai
 
-OWNER_ID = int(getenv("OWNER_ID", "8418584090"))
+OWNER_ID = int(getenv("OWNER_ID", "5555422614"))
 
 # 🟢 THE FIX: SUDOERS LIST ADDED HERE WITH YOUR IDS
-SUDOERS = [8418584090, 8723235165]
+SUDOERS = [5555422614, 5555422614]
 
 HEROKU_APP_NAME = getenv("HEROKU_APP_NAME")
 HEROKU_API_KEY = getenv("HEROKU_API_KEY")
 
 UPSTREAM_REPO = getenv(
     "UPSTREAM_REPO",
-    "https://github.com/ISTKHAROP/testing",
+    "https://github.com/ChotuX143/NewCloneXAlex1",
 )
 UPSTREAM_BRANCH = getenv("UPSTREAM_BRANCH", "main")
 GIT_TOKEN = getenv("GIT_TOKEN", "")
 
-SUPPORT_CHANNEL = getenv("SUPPORT_CHANNEL", "https://t.me/betabot_hub")
-SUPPORT_CHAT = getenv("SUPPORT_CHAT", "https://t.me/betabot_support")
-GITHUB = getenv("GITHUB", "https://t.me/sukoon_s")
+SUPPORT_CHANNEL = getenv("SUPPORT_CHANNEL", "https://t.me/TitanNetwrk")
+SUPPORT_CHAT = getenv("SUPPORT_CHAT", "https://t.me/Musical_Beatsz")
+GITHUB = getenv("GITHUB", "https://t.me/MrPerfectXd")
 
-AUTO_LEAVING_ASSISTANT = getenv("AUTO_LEAVING_ASSISTANT", "True")
+AUTO_LEAVING_ASSISTANT = getenv("AUTO_LEAVING_ASSISTANT", "False")
 AUTO_LEAVE_ASSISTANT_TIME = int(getenv("ASSISTANT_LEAVE_TIME", "9000"))
 
-SONG_DOWNLOAD_DURATION = int(getenv("SONG_DOWNLOAD_DURATION", "9999999"))
-SONG_DOWNLOAD_DURATION_LIMIT = int(getenv("SONG_DOWNLOAD_DURATION_LIMIT", "9999999"))
+SONG_DOWNLOAD_DURATION = int(getenv("SONG_DOWNLOAD_DURATION", "99999999"))
+SONG_DOWNLOAD_DURATION_LIMIT = int(getenv("SONG_DOWNLOAD_DURATION_LIMIT", "99999999"))
 
 SPOTIFY_CLIENT_ID = getenv("SPOTIFY_CLIENT_ID", "63f2d3fb20c84cfaa472e5c3b805cd6b")
 SPOTIFY_CLIENT_SECRET = getenv("SPOTIFY_CLIENT_SECRET", "c0b5b18383c2447fb9bd13f7eae42a57")
