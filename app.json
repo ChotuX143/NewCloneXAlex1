@@ -1,7 +1,7 @@
 {
-  "name": "MahiMusic",
-  "description": "MahiMusic - A Telegram Music Bot, built with Python, Pyrogram & Py-TgCalls. Stream high-quality music in voice chats seamlessly!",
-  "logo": "https://files.catbox.moe/4hl7n8.jpg",
+  "name": "🎵˹● 𝑻𝑶𝑴 ✘ 𝑱𝑬𝑹𝑹𝒀 𝑴𝑼𝑺𝑰𝑪 ●˼™🎵",
+  "description": "Tom X Jerry - A Telegram Music Bot, built with Python, Pyrogram & Py-TgCalls. Stream high-quality music in voice chats seamlessly!",
+  "logo": "https://files.catbox.moe/ovkpoo.png",
   "keywords": [
     "python3",
     "telegram",
@@ -40,7 +40,7 @@
       "required": true
     },
     "STRING_SESSION": {
-      "description": "A Pyrogram v2 String Session from @SHIV_SESSION_BOT on Telegram.",
+      "description": "A Pyrogram v2 String Session from @MrPerfectXd on Telegram.",
       "value": "",
       "required": true
     },
