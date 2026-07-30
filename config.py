@@ -25,7 +25,7 @@ JIOSAAVN_API = getenv("JIOSAAVN_API", "https://saavn.me/search/songs?query=")
 # ----------------- API RACING CONFIGURATION -----------------
 # 1. Shruti API
 API_URL = getenv("API_URL", "https://api.shrutibots.site")
-API_KEY = getenv("API_KEY", "ShrutiBotsC0WH1GowF2HkGoKv4F3y")
+API_KEY = getenv("API_KEY", "ShrutiBotsZa1SAoubJ7OqtKHZbDgu")
 
 # 2. Xbit API
 YTPROXY_URL = getenv("YTPROXY_URL", "https://tgapi.xbitcode.com")
@@ -37,7 +37,7 @@ WORKER_FALLBACK_API_KEY = getenv("WORKER_FALLBACK_API_KEY", "itsmesid")
 
 # 4. Inflex API
 INFLEX_API_URL = getenv("INFLEX_API_URL", "https://teaminflex.xyz")
-INFLEX_API_KEY = getenv("INFLEX_API_KEY", "INFLEX40920628D")
+INFLEX_API_KEY = getenv("INFLEX_API_KEY", "INFLEX47405528D")
 
 
 
@@ -51,7 +51,7 @@ CLONE_LOGGER_2 = int(getenv("CLONE_LOGGER_2", "-1002645692318")) # ✅ Yahan nay
 OWNER_ID = int(getenv("OWNER_ID", "5555422614"))
 
 # 🟢 THE FIX: SUDOERS LIST ADDED HERE WITH YOUR IDS
-SUDOERS = [5555422614, 5555422614]
+SUDOERS = [5555422614, 6556974543]
 
 HEROKU_APP_NAME = getenv("HEROKU_APP_NAME")
 HEROKU_API_KEY = getenv("HEROKU_API_KEY")
@@ -65,7 +65,7 @@ GIT_TOKEN = getenv("GIT_TOKEN", "")
 
 SUPPORT_CHANNEL = getenv("SUPPORT_CHANNEL", "https://t.me/TitanNetwrk")
 SUPPORT_CHAT = getenv("SUPPORT_CHAT", "https://t.me/Musical_Beatsz")
-GITHUB = getenv("GITHUB", "https://t.me/MrPerfectXd")
+GITHUB = getenv("GITHUB", "https://t.me/Telugu_Grpz")
 
 AUTO_LEAVING_ASSISTANT = getenv("AUTO_LEAVING_ASSISTANT", "False")
 AUTO_LEAVE_ASSISTANT_TIME = int(getenv("ASSISTANT_LEAVE_TIME", "9000"))
@@ -88,17 +88,17 @@ STRING2 = getenv("STRING_SESSION2", "")
 STRING3 = getenv("STRING_SESSION3", "")
 STRING4 = getenv("STRING_SESSION4", "")
 
-START_IMG_URL = getenv("START_IMG_URL", "https://telegra.ph/file/2e3d368e77c449c287430.jpg").split()
-HELP_IMG_URL = getenv("HELP_IMG_URL", "https://files.catbox.moe/dk92ep.jpg").split()
-PING_IMG_URL = getenv("PING_IMG_URL", "https://files.catbox.moe/wktt8l.jpg").split()
+START_IMG_URL = getenv("START_IMG_URL", "https://telegra.ph/file/c316aa782ab03f45ba9c2.jpg").split()
+HELP_IMG_URL = getenv("HELP_IMG_URL", "https://telegra.ph/file/c316aa782ab03f45ba9c2.jpg").split()
+PING_IMG_URL = getenv("PING_IMG_URL", "https://telegra.ph/file/64dacee61bdf2365497ef.jpg").split()
 
-PLAYLIST_IMG_URL = getenv("PLAYLIST_IMG_URL", "https://files.catbox.moe/6r97s4.jpg https://files.catbox.moe/huqcbp.jpg https://files.catbox.moe/gbx3h3.jpg https://files.catbox.moe/6f5azl.jpg").split()
-STATS_IMG_URL = getenv("STATS_IMG_URL", "https://files.catbox.moe/6r97s4.jpg")
-TELEGRAM_AUDIO_URL = getenv("TELEGRAM_AUDIO_URL", "https://files.catbox.moe/6f5azl.jpg").split()
-TELEGRAM_VIDEO_URL = getenv("TELEGRAM_VIDEO_URL", "https://files.catbox.moe/6r97s4.jpg").split()
-STREAM_IMG_URL = getenv("STREAM_IMG_URL", "https://files.catbox.moe/6r97s4.jpg").split()
+PLAYLIST_IMG_URL = getenv("PLAYLIST_IMG_URL", "https://telegra.ph/file/c316aa782ab03f45ba9c2.jpg https://files.catbox.moe/92cq9y.png https://files.catbox.moe/ovkpoo.png https://files.catbox.moe/ovkpoo.png").split()
+STATS_IMG_URL = getenv("STATS_IMG_URL", "https://files.catbox.moe/601kug.jpg")
+TELEGRAM_AUDIO_URL = getenv("TELEGRAM_AUDIO_URL", "https://files.catbox.moe/ovkpoo.png").split()
+TELEGRAM_VIDEO_URL = getenv("TELEGRAM_VIDEO_URL", "https://files.catbox.moe/ovkpoo.png").split()
+STREAM_IMG_URL = getenv("STREAM_IMG_URL", "https://files.catbox.moe/ovkpoo.png").split()
 SOUNCLOUD_IMG_URL = getenv("SOUNCLOUD_IMG_URL", "https://i.ibb.co/S4sPf3q8/soundcloud.jpg").split()
-YOUTUBE_IMG_URL = getenv("YOUTUBE_IMG_URL", "https://files.catbox.moe/6r97s4.jpg").split()
+YOUTUBE_IMG_URL = getenv("YOUTUBE_IMG_URL", "https://files.catbox.moe/ovkpoo.png").split()
 SPOTIFY_ARTIST_IMG_URL = getenv("SPOTIFY_ARTIST_IMG_URL", "https://i.ibb.co/XZfMS8Db/spotify.jpg").split()
 SPOTIFY_ALBUM_IMG_URL = getenv("SPOTIFY_ALBUM_IMG_URL", "https://i.ibb.co/XZfMS8Db/spotify.jpg").split()
 SPOTIFY_PLAYLIST_IMG_URL = getenv("SPOTIFY_PLAYLIST_IMG_URL", "https://i.ibb.co/XZfMS8Db/spotify.jpg").split()
@@ -110,7 +110,7 @@ votemode = {}
 autoclean = []
 confirmer = {}
 
-START_IMG_URL = getenv("START_IMG_URL", "https://files.catbox.moe/n22tbs.jpg").split()
+START_IMG_URL = getenv("START_IMG_URL", "https://files.catbox.moe/d4yhs6.png").split()
 
 def time_to_seconds(time):
     return sum(int(x) * 60**i for i, x in enumerate(reversed(str(time).split(":"))))
