@@ -1,4 +1,3 @@
-1
 from pyrogram.types import InlineKeyboardButton
 from enum import Enum
 
