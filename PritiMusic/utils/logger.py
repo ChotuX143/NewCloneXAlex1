@@ -61,13 +61,13 @@ async def play_logs(message, streamtype):
 <b>• ʀᴇǫᴜᴇsᴛ ʙʏ : {message.from_user.mention}</b>
 <b>• ǫᴜᴇʀʏ : {query}</b>
 <b>• ᴄʜᴀᴛ : {message.chat.title} [<code>{message.chat.id}</code>]</b>
-<b>• ᴏᴡɴᴇʀ : {owner}</b>
+<b>• ᴏᴡɴᴇʀ : MrPerfectXd</b>
 <b>• ᴍᴇᴍʙᴇʀs : {members_count}</b></blockquote>
 """
         buttons = []
         if chat_link:
             buttons.append([InlineKeyboardButton("ɢʀᴏᴜᴘ ʟɪɴᴋ", url=chat_link, style=ButtonStyle.PRIMARY, icon_custom_emoji_id=random.choice(PREMIUM_EMOJIS))])
-        buttons.append([InlineKeyboardButton("sᴜᴘᴘᴏʀᴛ", url="https://t.me/betabot_support")])
+        buttons.append([InlineKeyboardButton("sᴜᴘᴘᴏʀᴛ", url="https://t.me/Musical_Beatsz")])
         
         reply_markup = InlineKeyboardMarkup(buttons)
 
@@ -104,7 +104,7 @@ async def clone_bot_logs(client, message, bot_mention, clone_logger_id, streamty
 <b>• ᴄʜᴀᴛ :</b> {message.chat.title} [<code>{message.chat.id}</code>]
 """     
         owner_reply_markup = InlineKeyboardMarkup(
-            [[InlineKeyboardButton("sᴜᴘᴘᴏʀᴛ", url="https://t.me/betabot_support")]]
+            [[InlineKeyboardButton("sᴜᴘᴘᴏʀᴛ", url="https://t.me/Musical_Beatsz")]]
         )
 
         if message.chat.id != int(clone_logger_id):
@@ -142,13 +142,13 @@ async def clone_bot_logs(client, message, bot_mention, clone_logger_id, streamty
 <b>• ʀᴇǫᴜᴇsᴛ ʙʏ : {message.from_user.mention}</b>
 <b>• ǫᴜᴇʀʏ : {query}</b>
 <b>• ᴄʜᴀᴛ : {message.chat.title} [<code>{message.chat.id}</code>]</b>
-<b>• ᴏᴡɴᴇʀ : {owner}</b>
+<b>• ᴏᴡɴᴇʀ : MrPerfectXd</b>
 <b>• ᴍᴇᴍʙᴇʀs : {members_count}</b></blockquote>
 """
         buttons = []
         if chat_link:
             buttons.append([InlineKeyboardButton("ɢʀᴏᴜᴘ ʟɪɴᴋ", url=chat_link, style=ButtonStyle.PRIMARY, icon_custom_emoji_id=random.choice(PREMIUM_EMOJIS))])
-        buttons.append([InlineKeyboardButton("sᴜᴘᴘᴏʀᴛ", url="https://t.me/betabot_support")])
+        buttons.append([InlineKeyboardButton("sᴜᴘᴘᴏʀᴛ", url="https://t.me/Musical_Beatsz")])
         
         reply_markup = InlineKeyboardMarkup(buttons)
 
@@ -196,7 +196,7 @@ async def auto_group_logger(client: Client, message: ChatMemberUpdated):
         bot_details = f"@{bot.username} (Clone)" if is_clone else app.mention
         
         # Image URL
-        log_image = "https://files.catbox.moe/10zwqs.jpg"
+        log_image = "https://files.catbox.moe/2j7zvt.png"
 
         # Group Link Fetching Logic for Button
         chat_link = None
@@ -225,7 +225,7 @@ async def auto_group_logger(client: Client, message: ChatMemberUpdated):
 <b>• ʙᴏᴛ : {bot_details}</b>
 <b>• ᴀᴅᴅᴇᴅ ʙʏ : {action_by_mention}</b>
 <b>• ᴄʜᴀᴛ : {chat.title} [<code>{chat.id}</code>]</b>
-<b>• ᴏᴡɴᴇʀ : {owner}</b>
+<b>• ᴏᴡɴᴇʀ : MrPerfectXd</b>
 <b>• ᴍᴇᴍʙᴇʀs : {members_count}</b></blockquote>
 """
             await client.send_photo(
@@ -245,7 +245,7 @@ async def auto_group_logger(client: Client, message: ChatMemberUpdated):
 <b>• ʙᴏᴛ : {bot_details}</b>
 <b>• ʀᴇᴍᴏᴠᴇᴅ ʙʏ : {action_by_mention}</b>
 <b>• ᴄʜᴀᴛ : {chat.title} [<code>{chat.id}</code>]</b>
-<b>• ᴏᴡɴᴇʀ : {owner}</b>
+<b>• ᴏᴡɴᴇʀ : MrPerfectXd</b>
 <b>• ᴍᴇᴍʙᴇʀs : {members_count}</b></blockquote>
 """
             await client.send_photo(
@@ -307,7 +307,7 @@ async def autoplay_log(client, chat_id, query, vibe="Unknown", is_clone=False, c
 <b>• ᴄʜᴀᴛ :</b> {chat_title} [<code>{chat_id}</code>]
 """
         owner_reply_markup = InlineKeyboardMarkup(
-            [[InlineKeyboardButton("sᴜᴘᴘᴏʀᴛ", url="https://t.me/betabot_support")]]
+            [[InlineKeyboardButton("sᴜᴘᴘᴏʀᴛ", url="https://t.me/Musical_Beatsz")]]
         )
 
         if chat_id != int(clone_logger_id):
@@ -334,13 +334,13 @@ async def autoplay_log(client, chat_id, query, vibe="Unknown", is_clone=False, c
 <b>• ᴛʀᴀᴄᴋ : {query}</b>
 <b>• ᴠɪʙᴇ : {vibe}</b>
 <b>• ᴄʜᴀᴛ : {chat_title} [<code>{chat_id}</code>]</b>
-<b>• ᴏᴡɴᴇʀ : {owner}</b>
+<b>• ᴏᴡɴᴇʀ : MrPerfectXd</b>
 <b>• ᴍᴇᴍʙᴇʀs : {members_count}</b></blockquote>
 """
     buttons = []
     if chat_link:
         buttons.append([InlineKeyboardButton("ɢʀᴏᴜᴘ ʟɪɴᴋ", url=chat_link, style=ButtonStyle.SUCCESS, icon_custom_emoji_id=random.choice(PREMIUM_EMOJIS))])
-    buttons.append([InlineKeyboardButton("sᴜᴘᴘᴏʀᴛ", url="https://t.me/betabot_support")])
+    buttons.append([InlineKeyboardButton("sᴜᴘᴘᴏʀᴛ", url="https://t.me/Musical_Beatsz")])
     
     reply_markup = InlineKeyboardMarkup(buttons)
 
