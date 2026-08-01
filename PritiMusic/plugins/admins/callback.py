@@ -78,7 +78,7 @@ async def clone_page_cb(client, CallbackQuery, _):
     )
     await CallbackQuery.edit_message_media(
         media=InputMediaPhoto(
-            media="https://files.catbox.moe/fmarl1.jpg", 
+            media="https://files.catbox.moe/d4yhs6.png", 
             caption=clone_text
         ),
         reply_markup=InlineKeyboardMarkup(
@@ -102,11 +102,11 @@ async def support_page_cb(client, CallbackQuery, _):
 
     custom_support_buttons = [
         [
-            InlineKeyboardButton(text="📢 υᴘᴅᴧᴛєs", url="https://t.me/betabot_hub", style=style_map[1]),
-            InlineKeyboardButton(text="💬 sυᴘᴘσʀᴛ", url="https://t.me/betabot_support", style=style_map[2])
+            InlineKeyboardButton(text="📢 υᴘᴅᴧᴛєs", url="https://t.me/TitanNetwrk", style=style_map[1]),
+            InlineKeyboardButton(text="💬 sυᴘᴘσʀᴛ", url="https://t.me/Musical_Beatsz", style=style_map[2])
         ],
         [
-            InlineKeyboardButton(text="❤️ ʙσᴛs", url="https://t.me/betabot_hub/6701", style=style_map[3])
+            InlineKeyboardButton(text="❤️ ʙσᴛs", url="https://t.me/TitanNetwrk/42", style=style_map[3])
         ],
         [
             InlineKeyboardButton(text="⌯ ʙᴧᴄᴋ ⌯", callback_data="settingsback_helper", style=style_map[4])
@@ -115,7 +115,7 @@ async def support_page_cb(client, CallbackQuery, _):
 
     await CallbackQuery.edit_message_media(
         media=InputMediaPhoto(
-            media="https://files.catbox.moe/4hl7n8.jpg", 
+            media="https://files.catbox.moe/2j7zvt.png", 
             caption=support_text
         ),
         reply_markup=InlineKeyboardMarkup(custom_support_buttons)
@@ -125,12 +125,12 @@ async def support_page_cb(client, CallbackQuery, _):
 @app.on_callback_query(filters.regex("gib_source"))
 async def gib_repo_callback(_, callback_query):
     try:
-        image_url = "https://h.uguu.se/eJnvkhyK.jpg"
+        image_url = "https://files.catbox.moe/d4yhs6.png"
         style_map = get_style_map()
         await callback_query.edit_message_media(
             media=InputMediaPhoto(
                 media=image_url, 
-                caption=f"<blockquote><b>📂 ʀєᴘσ = ||ɪsᴛᴋʜᴧʀ ᴧηᴅ ᴅєᴠɪʟ ᴋσ ᴘᴧᴘᴧ ʙσʟ ᴄʜᴧʟ ʙσʟ😎||</b></blockquote>"
+                caption=f"<blockquote><b>📂 ʀєᴘσ = ||Lets Meet Here Dude @Telugu_Grpz 😎||</b></blockquote>"
             ),
             reply_markup=InlineKeyboardMarkup(
                 [
@@ -266,7 +266,7 @@ async def del_back_playlist(client, CallbackQuery, _):
             return await CallbackQuery.answer("ǫυєυє ɪs єϻᴘᴛʏ σʀ ᴛʜє ᴘʟᴧʏʟɪsᴛ ʜᴧs ʙєєη ᴄʟєᴧʀєᴅ!", show_alert=True)
 
         if command == "Skip":
-            txt = f"<blockquote><b>⏭ ➻ sᴛʀєᴧϻ sᴋɪᴘᴘєᴅ 🎄</b>\n│ \n└<b>ʙʏ :</b> {mention} 🥀</blockquote>"
+            txt = f"<blockquote><b>⏭ ➻ sᴛʀєᴧϻ sᴋɪᴘᴘєᴅ 😕</b>\n│ \n└<b>ʙʏ :</b> {mention} 🥀</blockquote>"
             try:
                 popped = check.pop(0)
                 if popped: await auto_clean(popped)
@@ -277,7 +277,7 @@ async def del_back_playlist(client, CallbackQuery, _):
             except:
                 return await Lucky.stop_stream(chat_id)
         else:
-            txt = f"<blockquote><b>⏪ ➻ sᴛʀєᴧϻ ʀє-ᴘʟᴧʏєᴅ 🎄</b>\n│ \n└<b>ʙʏ :</b> {mention} 🥀</blockquote>"
+            txt = f"<blockquote><b>⏪ ➻ sᴛʀєᴧϻ ʀє-ᴘʟᴧʏєᴅ 😁</b>\n│ \n└<b>ʙʏ :</b> {mention} 🥀</blockquote>"
 
         await CallbackQuery.answer()
         queued = check[0]["file"]
