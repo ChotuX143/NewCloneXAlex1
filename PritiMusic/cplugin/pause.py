@@ -70,7 +70,7 @@ async def pause_admin(cli: Client, message: Message, _, chat_id):
             action_btn("ʀᴇᴘʟᴀʏ ↺", callback_data=f"ADMIN Replay|{chat_id}", style=ButtonStyle.PRIMARY),
         ],
         [ 
-            action_btn("✯ CLONE NOW ✯", url="https://t.me/clone_MUSICrobot", style=ButtonStyle.PRIMARY, use_emoji=True)
+            action_btn("✯ ᴄʟᴏɴᴇ ɴᴏᴡ ✯", url="https://t.me/TomXClonerBot", style=ButtonStyle.PRIMARY, use_emoji=True)
         ],
     ]
 
