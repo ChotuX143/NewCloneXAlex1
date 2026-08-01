@@ -75,8 +75,8 @@ from config import BANNED_USERS, lyrical
 # =======================================================
 # 🎨 PREMIUM TEXT STYLES (BETA HUB)
 # =======================================================
-MSG_DOWNLOADING = "➛ 𝐃𝐨𝐰𝐧𝐥𝐨𝐚𝐝𝐢𝐧𝐠 𝐅𝐫𝐨𝐦 𝐁𝐞𝐭𝐚 𝐇𝐮𝐛 𝐁𝐚𝐛𝐲 𝐩𝐥𝐞𝐚𝐬𝐞 𝐰𝐚𝐢𝐭😁...."
-MSG_STARTING = "➛ 𝐒𝐭𝐚𝐫𝐭𝐢𝐧𝐠 𝐒𝐭𝐫𝐞𝐚𝐦 𝐄𝐧𝐣𝐨𝐲❤️...."
+MSG_DOWNLOADING = "👻"
+MSG_STARTING = "➛𝐃ᴏᴡɴʟᴏᴀᴅɪɴɢ 𝗕ᴀʙʏ 𝗣ʟᴇᴀsᴇ 𝗪ᴀɪᴛ 𝗔 𝗦ᴇᴄᴏɴᴅ....🥀"
 
 # =======================================================
 # 🚀 STYLISH LIVE PROGRESS BAR
@@ -205,7 +205,7 @@ def get_random_img(img_list):
         if isinstance(img_list, list):
             return random.choice(img_list)
         return img_list
-    return "https://telegra.ph/file/2e3d368e77c449c287430.jpg"
+    return "https://files.catbox.moe/d4yhs6.png"
 
 def clean_youtube_url(url):
     if not isinstance(url, str): return url, None, "unknown"
@@ -666,7 +666,7 @@ async def play_commnd(client, message: Message, _, chat_id, video, channel, play
             buttons = InlineKeyboardMarkup(
                 [[InlineKeyboardButton(text="Support", url=C_SUPPORT_CHAT), InlineKeyboardButton(text="Close", callback_data="close")]]
             )
-            play_img = get_random_img(config.PLAYLIST_IMG_URL) if hasattr(config, "PLAYLIST_IMG_URL") else "https://telegra.ph/file/2e3d368e77c449c287430.jpg"
+            play_img = get_random_img(config.PLAYLIST_IMG_URL) if hasattr(config, "PLAYLIST_IMG_URL") else "https://files.catbox.moe/d4yhs6.png"
             try:
                 if stype == "photo" and scontent:
                      play_img = scontent
