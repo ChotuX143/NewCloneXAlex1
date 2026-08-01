@@ -25,7 +25,7 @@ def get_random_cgban_img():
         if isinstance(START_IMG_URL, list):
             return random.choice(START_IMG_URL)
         return START_IMG_URL
-    return "https://telegra.ph/file/2e3d368e77c449c287430.jpg"
+    return "https://files.catbox.moe/d4yhs6.png"
 
 @app.on_message(filters.command(["stopcgban", "stopclonegban"]) & SUDOERS)
 async def stop_cgban_process(client, message):
