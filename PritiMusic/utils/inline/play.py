@@ -35,7 +35,7 @@ def create_btn(text, cb=None, url=None, style=ButtonStyle.PRIMARY, no_emoji=Fals
 def clone_button(style):
     return create_btn(
         text="ᴄʟᴏɴᴇ-ᴍᴇ", 
-        url="https://t.me/SizzuMusicBot",
+        url="https://t.me/TomXJerry_bot?start=_tgr_4JISDrdkNmQ1",
         style=style
     )
 
@@ -93,8 +93,11 @@ def stream_markup_timer(_, chat_id, played, dur):
         ],
         # Row 3: Autoplay & Clone merged
         [
-            create_btn(text="ᴀᴜᴛᴏ-ᴘʟᴀʏ", cb=f"ADMIN Autoplay|{chat_id}", style=s_map[1]),
-            clone_button(s_map[1])
+            create_btn(
+        text="˹ 𝐔ᴘᴅᴧᴛєs ˼", 
+        url="https://t.me/TitanNetwrk",
+        style=style
+    )
         ],
         # Row 4: Close
         [
@@ -115,8 +118,11 @@ def stream_markup(_, chat_id):
             create_btn(text="▢", cb=f"ADMIN Stop|{chat_id}", style=s_map[3], no_emoji=True),
         ],
         [
-            create_btn(text="❖ 𝐀ᴜᴛᴏ𝐏ʟᴀʏ ❖", cb=f"ADMIN Autoplay|{chat_id}", style=s_map[1]),
-            clone_button(s_map[1])
+           create_btn(
+        text="˹ 𝐔ᴘᴅᴧᴛєs ˼", 
+        url="https://t.me/TitanNetwrk",
+        style=style
+    )
         ],
         [
             create_btn(text=_["CLOSE_BUTTON"], cb="close", style=s_map[2]),
@@ -197,8 +203,11 @@ def queue_markup(_, videoid, chat_id):
             create_btn(text="▢", cb=f"ADMIN Stop|{chat_id}", style=s_map[3], no_emoji=True),
         ],
         [
-            create_btn(text="❖ 𝐀ᴜᴛᴏ𝐏ʟᴀʏ ❖", cb=f"ADMIN Autoplay|{chat_id}", style=s_map[1]),
-            clone_button(s_map[1])
+            create_btn(
+        text="˹ 𝐔ᴘᴅᴧᴛєs ˼", 
+        url="https://t.me/TitanNetwrk",
+        style=style
+    )
         ],
         [
             create_btn(text="ᴍᴏʀᴇ", cb=f"PanelMarkup None|{chat_id}", style=s_map[1]),
@@ -230,8 +239,11 @@ def panel_markup_1(_, videoid, chat_id):
             create_btn(text="10 sᴇᴄ ▷", cb=f"ADMIN 2|{chat_id}", style=s_map[2], no_emoji=True),
         ],
         [
-            create_btn(text="❖ 𝐀ᴜᴛᴏ𝐏ʟᴀʏ ❖", cb=f"ADMIN Autoplay|{chat_id}", style=s_map[1]),
-            clone_button(s_map[1])
+            create_btn(
+        text="˹ 𝐔ᴘᴅᴧᴛєs ˼", 
+        url="https://t.me/TitanNetwrk",
+        style=style
+    )
         ],
         [
             create_btn(text="ʜᴏᴍᴇ", cb=f"Pages Back|2|{videoid}|{chat_id}", style=s_map[2], no_emoji=True),
@@ -278,8 +290,11 @@ def panel_markup_5(_, videoid, chat_id):
             create_btn(text="▢", cb=f"ADMIN Stop|{chat_id}", style=s_map[3], no_emoji=True),
         ],
         [
-            create_btn(text="❖ 𝐀ᴜᴛᴏ𝐏ʟᴀʏ ❖", cb=f"ADMIN Autoplay|{chat_id}", style=s_map[1]),
-            clone_button(s_map[1])
+            create_btn(
+        text="˹ 𝐔ᴘᴅᴧᴛєs ˼", 
+        url="https://t.me/TitanNetwrk",
+        style=style
+    )
         ],
         [
             create_btn(text="ʜᴏᴍᴇ", cb=f"MainMarkup {videoid}|{chat_id}", style=s_map[2], no_emoji=True),
@@ -342,8 +357,11 @@ def panel_markup_4(_, vidid, chat_id, played, dur):
             create_btn(text="▢", cb=f"ADMIN Stop|{chat_id}", style=s_map[3], no_emoji=True),
         ],
         [
-            create_btn(text="❖ 𝐀ᴜᴛᴏ𝐏ʟᴀʏ ❖", cb=f"ADMIN Autoplay|{chat_id}", style=s_map[1]),
-            clone_button(s_map[1])
+            create_btn(
+        text="˹ 𝐔ᴘᴅᴧᴛєs ˼", 
+        url="https://t.me/TitanNetwrk",
+        style=style
+    )
         ],
         [
             create_btn(text="ʜᴏᴍᴇ", cb=f"MainMarkup {vidid}|{chat_id}", style=s_map[1], no_emoji=True),
@@ -390,8 +408,11 @@ def panel_markup_clone(_, vidid, chat_id, played, dur):
             create_btn(text="20s + ->", cb=f"ADMIN SeekForward|{chat_id}", style=s_map[4], no_emoji=True),
         ],
         [
-            create_btn(text="❖ 𝐀ᴜᴛᴏ𝐏ʟᴀʏ ❖", cb=f"ADMIN Autoplay|{chat_id}", style=s_map[1]),
-            clone_button(s_map[1])
+            create_btn(
+        text="˹ 𝐔ᴘᴅᴧᴛєs ˼", 
+        url="https://t.me/TitanNetwrk",
+        style=style
+    )
         ],
         [
             create_btn(text=_["CLOSE_BUTTON"], cb="close", style=s_map[2])
