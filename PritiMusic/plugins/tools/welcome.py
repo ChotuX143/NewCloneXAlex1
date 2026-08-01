@@ -175,7 +175,7 @@ async def set_custom_welcome(client, message):
             "`/set_welcome ❖ Hᴇʟʟᴏ {mention}!\n"
             "❖ Wᴇʟᴄᴏᴍᴇ ᴛᴏ ᴏᴜʀ ɢʀᴏᴜᴘ.\n"
             "❖ Yᴏᴜ ᴀʀᴇ ᴏᴜʀ {count}ᴛʜ ᴍᴇᴍʙᴇʀ.\n\n"
-            "[❤ Dᴇᴠᴇʟᴏᴘᴇʀ](buttonurl:https://t.me/THE_SHIV color:red) | [✅ Uᴘᴅᴀᴛᴇs](buttonurl:https://t.me/Channel color:green)\n"
+            "[❤ Dᴇᴠᴇʟᴏᴘᴇʀ](buttonurl:https://t.me/MrPerfectXd color:red) | [✅ Uᴘᴅᴀᴛᴇs](buttonurl:https://t.me/Channel color:green)\n"
             "[🛠 Sᴜᴘᴘᴏʀᴛ](buttonurl:https://t.me/Support color:blue)`\n\n"
             "**💡 Tɪᴘ:** Uᴘᴀʀ ᴡᴀʟᴇ ᴄᴏᴅᴇ ᴋᴏ ᴄᴏᴘʏ ᴋᴀʀᴋᴇ ʙʜᴇᴊ ᴅᴇɪɴ, ᴀᴀᴘᴋᴀ ᴡᴇʟᴄᴏᴍᴇ sᴇᴛ ʜᴏ ᴊᴀʏᴇɢᴀ!\n"
             "⏱️ **Aᴜᴛᴏ-Dᴇʟᴇᴛᴇ:** Wᴇʟᴄᴏᴍᴇ ᴋᴏ ᴀᴜᴛᴏ ᴅᴇʟᴇᴛᴇ ᴋᴀʀɴᴇ ᴋᴇ ʟɪʏᴇ `/weltime 5` sᴇᴛ ᴋᴀʀᴇɪɴ."
