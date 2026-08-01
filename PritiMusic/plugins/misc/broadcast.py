@@ -37,7 +37,7 @@ def get_progress_bar(current, total, length=20):
 # SELF PROMO DATABASE SETUP
 # ==========================================
 dbclient = AsyncIOMotorClient(MONGO_DB_URI)
-db = dbclient.MahiMusic
+db = dbclient.TomXJerryMusic
 promo_msgs_db = db.promo_messages
 promo_toggle_db = db.promo_settings
 broadcast_time_db = db.promo_time
@@ -64,9 +64,9 @@ async def delete_promo_record(chat_id: int, message_id: int):
 # ==========================================
 # SELF PROMO ASSETS
 # ==========================================
-PROMO_IMAGE = "https://files.catbox.moe/etdhlr.jpg"
+PROMO_IMAGE = "https://files.catbox.moe/d4yhs6.png"
 PROMO_TEXT = """
-⊚ ᴛʜɪꜱ ɪꜱ [✶ 🎀 ᴍᴀʜɪ ᴍᴜꜱɪᴄ ᴄʟᴏɴᴇ 🎀 ✶](https://t.me/clone_MUSICrobot)
+⊚ ᴛʜɪꜱ ɪꜱ [✶🎵˹● 𝑻𝑶𝑴 ✘ 𝑱𝑬𝑹𝑹𝒀 𝑴𝑼𝑺𝑰𝑪 ●˼™🎵✶](https://t.me/TomXClonerBot)
 
 ➻ ᴧ ᴘʀєᴍɪᴜᴍ ᴅєꜱɪɢηєᴅ ϻᴜꜱɪᴄ ᴘʟᴧʏєʀ ʙσᴛ ꜰσʀ ᴛєʟєɢʀᴧϻ ɢʀσᴜᴘ & ᴄʜᴧηηєʟ. 
 🎧 24x7 ᴍᴜꜱɪᴄ • ꜱᴍᴏᴏᴛʜ ᴀɴᴅ ꜰᴀꜱᴛ ᴘʟᴀʏʙᴀᴄᴋ
@@ -76,7 +76,7 @@ PROMO_TEXT = """
 ᴀᴅᴅ ᴍᴇ ᴛᴏ ʏᴏᴜʀ ɢʀᴏᴜᴘ, ᴍᴀᴋᴇ ᴍᴇ ᴀᴅᴍɪɴ, ᴀɴᴅ ꜱᴇɴᴅ /play song name ᴛᴏ ꜱᴛᴀʀᴛ ᴛʜᴇ ᴍᴜꜱɪᴄ.
 """
 PROMO_BUTTON = InlineKeyboardMarkup(
-    [[InlineKeyboardButton("🎵 Aᴅᴅ ᴍᴇ ɪɴ ʏᴏᴜʀ ɢʀᴏᴜᴘ 🎧", url="https://t.me/clone_MUSICrobot?startgroup=true")]]
+    [[InlineKeyboardButton("🎵 Aᴅᴅ ᴍᴇ ɪɴ ʏᴏᴜʀ ɢʀᴏᴜᴘ 🎧", url="https://t.me/TomXClonerBot?startgroup=true")]]
 )
 
 
