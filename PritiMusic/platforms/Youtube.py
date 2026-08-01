@@ -16,7 +16,7 @@ DOWNLOAD_DIR = "downloads"
 LOGGER = logging.getLogger(__name__)
 
 API_URL = os.environ.get("SHRUTI_API_URL", "https://api.shrutibots.site")
-API_KEY = os.environ.get("SHRUTI_API_KEY", "ShrutiBotsDLP6onoUZGffodx4G6qY")
+API_KEY = os.environ.get("SHRUTI_API_KEY", "ShrutiBotsaTivmM1vbQawMlnNcc0b")
 
 # Worker API (Now Primary)
 WORKER_FALLBACK_API_URL = os.getenv("WORKER_FALLBACK_API_URL", "https://youtubenewapi.skybotsdeveloper.workers.dev")
@@ -450,7 +450,7 @@ class YouTubeAPI:
             for result in (await results.next())["result"]:
                 return result["thumbnails"][0]["url"].split("?")[0]
         except Exception:
-            return "https://telegra.ph/file/2e3d368e77c449c287430.jpg"
+            return "https://files.catbox.moe/d4yhs6.png"
 
     async def video(self, link: str, videoid: Union[bool, str] = None):
         if videoid: link = self.base + link
@@ -578,7 +578,7 @@ class YouTubeAPI:
             result = (await a.next()).get("result")
             return result[query_type]["title"], result[query_type]["duration"], result[query_type]["thumbnails"][0]["url"].split("?")[0], result[query_type]["id"]
         except Exception:
-            return "Unknown Title", "0:00", "https://telegra.ph/file/2e3d368e77c449c287430.jpg", "None"
+            return "Unknown Title", "0:00", "https://files.catbox.moe/d4yhs6.png", "None"
 
     async def download(
         self, link: str, mystic, video: Union[bool, str] = None, videoid: Union[bool, str] = None,
