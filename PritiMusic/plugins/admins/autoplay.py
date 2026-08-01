@@ -19,7 +19,7 @@ from PritiMusic.utils.database.autoplay import (
 from PritiMusic.utils.decorators import AdminRightsCheck
 from config import BANNED_USERS
 
-PHOTO_URL = "https://files.catbox.moe/6r97s4.jpg"
+PHOTO_URL = "https://files.catbox.moe/ovkpoo.png"
 
 # 🔥 PREMIUM EMOJIS LIST 🔥
 PREMIUM_EMOJIS = [
@@ -41,7 +41,7 @@ def get_panel(chat_id, enabled):
 {status}
 
 ━━━━━━━━━━━━━━━
-⚡ 𝐏ᴏᴡᴇʀᴇᴅ ʙʏ ➛ 𝐁ᴇᴛᴀ𝐁ᴏᴛ𝐬
+⚡ 𝐏ᴏᴡᴇʀᴇᴅ ʙʏ ➛🎵˹● 𝑻𝑶𝑴 ✘ 𝑱𝑬𝑹𝑹𝒀 𝑴𝑼𝑺𝑰𝑪 ●˼™🎵
 """
 
     buttons = InlineKeyboardMarkup(
