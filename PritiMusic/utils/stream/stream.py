@@ -24,7 +24,7 @@ def get_random_img(img_list):
         if isinstance(img_list, list):
             return random.choice(img_list)
         return img_list
-    return "https://files.catbox.moe/6r97s4.jpg"
+    return "https://files.catbox.moe/ovkpoo.png"
 
 # ⚡ SPEED OPTIMIZATION: Background Delete Task
 async def safe_delete(message):
