@@ -14,7 +14,7 @@ from PritiMusic.utils.database import get_served_users, get_served_chats
 # DATABASE SETUP
 # ==========================================
 dbclient = AsyncIOMotorClient(MONGO_DB_URI)
-db = dbclient.MahiMusic
+db = dbclient.TomXJerryMusic
 promo_msgs_db = db.promo_messages
 promo_toggle_db = db.promo_settings
 broadcast_time_db = db.promo_time
