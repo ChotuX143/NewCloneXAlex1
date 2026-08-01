@@ -14,8 +14,8 @@ from PritiMusic import app  # Main bot instance import kiya logs bhejney ke liye
 from PritiMusic.utils.database import clonebotdb
 from config import API_ID, API_HASH, OWNER_ID
 
-POWERED_BY = "\n\n🤞 **𝐏ᴏᴡєʀєᴅ 𝐁ʏ ➛ BETA BOTS.🙂❤️**"
-SESSION_ADVICE = "\n\n💡 **Tip:** You can directly generate your Session String easily and safely from here: @SHIV_SESSION_BOT"
+POWERED_BY = "\n\n🤞 **𝐏ᴏᴡєʀєᴅ 𝐁ʏ ➛ 🎵˹● 𝑻𝑶𝑴 ✘ 𝑱𝑬𝑹𝑹𝒀 𝑴𝑼𝑺𝑰𝑪 ●˼™🎵**"
+SESSION_ADVICE = "\n\n💡 **Tip:** You can directly generate your Session String easily and safely from here: @MrPerfectXd"
 
 # ==========================================
 # 1. CONNECT ASSISTANT (Phone + OTP)
