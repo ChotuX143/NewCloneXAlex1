@@ -151,7 +151,7 @@ def queuemarkup(_, vidid, chat_id):
         [
             create_btn(
                 text="๏ ᴍᴏʀᴇ ๏",
-                url="https://t.me/betabot_hub",
+                url="https://t.me/Telugu_Grpz",
                 style=s_map[1]
             ),
         ],
