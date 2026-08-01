@@ -57,14 +57,14 @@ LOG_CHAT = CLONE_LOGGER if CLONE_LOGGER else LOGGER_ID
 FOOTER = (
     "\n\n━━━━━━━━━━━━━━━━━━\n"
     "✨ **Start customizing your bot now! join **\n"
-    "📢 Update: @betabot_hub\n"
-    "🌚 Support: @betabot_support"
+    "📢 Update: @TitanNetwrk\n"
+    "🌚 Support: @Musical_Beatsz"
 )
 
 try:
     from config import BOT_LINK
 except ImportError:
-    BOT_LINK = "https://t.me/SizzuMusicBot"
+    BOT_LINK = "https://t.me/https://t.me/TomXJerry_bot"
 
 C_BOT_COMMANDS = [
     {"command": "/clone", "description": "ᴄʟᴏɴᴇs ʏᴏᴜʀ ᴏᴡɴ ᴍᴜsɪᴄ ʙᴏᴛ"},
@@ -85,7 +85,7 @@ def get_random_start_img():
         if isinstance(START_IMG_URL, list):
             return random.choice(START_IMG_URL)
         return START_IMG_URL
-    return "https://files.catbox.moe/f09yfp.jpg" # Fallback
+    return "https://files.catbox.moe/d4yhs6.png" # Fallback
 
 # --- 🔥 HELPER FUNCTION FOR BACKGROUND RESTART ---
 async def delayed_start(bot_token, session_string, wait_time, bot_number):
@@ -388,7 +388,7 @@ async def delete_cloned_bot(client, message, _):
 async def restart_bots():
     global CLONES
     try:
-        logging.info("Restarting all cloned bots........")
+        logging.info("Restarting All Cloned Bots Baby Please Wait.....")
         
         bots = []
         async for bot in clonebotdb.find():
