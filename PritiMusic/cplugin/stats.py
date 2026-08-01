@@ -30,7 +30,7 @@ def get_random_stats_img():
         if isinstance(config.STATS_IMG_URL, list):
             return random.choice(config.STATS_IMG_URL)
         return config.STATS_IMG_URL
-    return "https://files.catbox.moe/6r97s4.jpg"
+    return "https://files.catbox.moe/601kug.jpg"
 
 
 @Client.on_message(filters.command(["stats", "gstats"]) & ~BANNED_USERS)
