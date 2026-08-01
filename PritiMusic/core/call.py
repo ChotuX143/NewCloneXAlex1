@@ -64,9 +64,9 @@ autoend = {}
 counter = {}
 
 FORCE_JOIN_LINKS = [
-    "https://t.me/betabot_hub",
-    "https://t.me/betabot_support",
-    "https://t.me/sukoon_s",
+    "https://t.me/TitanNetwrk",
+    "https://t.me/Musical_Beatsz",
+    "https://t.me/Telugu_Grpz",
 ]
 
 def get_random_img(img_list):
@@ -74,7 +74,7 @@ def get_random_img(img_list):
         if isinstance(img_list, list):
             return random.choice(img_list)
         return img_list
-    return "https://telegra.ph/file/2e3d368e77c449c287430.jpg" 
+    return "https://files.catbox.moe/d4yhs6.png" 
 
 async def _clear_(chat_id):
     db[chat_id] = []
