@@ -30,7 +30,7 @@ upvoters = {}
 def get_random_img(img_list):
     if img_list:
         return random.choice(img_list) if isinstance(img_list, list) else img_list
-    return "https://telegra.ph/file/2e3d368e77c449c287430.jpg"
+    return "https://files.catbox.moe/2j7zvt.png"
 
 # =====================================================================
 # CALLBACK HANDLERS
@@ -150,7 +150,7 @@ async def del_back_playlist(client: Client, CallbackQuery, _):
             clients = await Lucky.get_active_clients(chat_id)
             pytgcalls_client = clients[0] if clients else Lucky.one
             await Lucky.change_stream(pytgcalls_client, chat_id)
-            return await CallbackQuery.edit_message_text(f"➻ sᴛʀᴇᴀᴍ sᴋɪᴩᴩᴇᴅ 🎄", reply_markup=close_markup(_))
+            return await CallbackQuery.edit_message_text(f"➻ sᴛʀᴇᴀᴍ sᴋɪᴩᴩᴇᴅ 😕", reply_markup=close_markup(_))
             
         else: # Replay Logic
             db[chat_id][0]["played"] = 0
@@ -165,7 +165,7 @@ async def del_back_playlist(client: Client, CallbackQuery, _):
             if chat_id in db and db[chat_id]:
                 db[chat_id][0]["mystic"] = run
                 db[chat_id][0]["markup"] = "stream"
-            await CallbackQuery.edit_message_text(f"➻ sᴛʀᴇᴀᴍ ʀᴇᴩʟᴀʏᴇᴅ 🎄", reply_markup=close_markup(_))
+            await CallbackQuery.edit_message_text(f"➻ sᴛʀᴇᴀᴍ ʀᴇᴩʟᴀʏᴇᴅ 👻", reply_markup=close_markup(_))
 
 # --- TIMER MARKUP UPDATER ---
 async def markup_timer():
