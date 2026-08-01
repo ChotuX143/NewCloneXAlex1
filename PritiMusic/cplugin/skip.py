@@ -80,7 +80,7 @@ async def skip_comm(cli: Client, message: Message, _, chat_id):
         await Lucky.change_stream(pytgcalls_client, chat_id)
         
         # Skip confirmation
-        await message.reply_text(f"➻ sᴛʀᴇᴀᴍ sᴋɪᴩᴩᴇᴅ 🎄\n└ʙʏ : {message.from_user.mention}")
+        await message.reply_text(f"➻ sᴛʀᴇᴀᴍ sᴋɪᴩᴩᴇᴅ 😕\n└ʙʏ : {message.from_user.mention}")
         
     except Exception as e:
         # Agar error aaya toh gracefully handle karo
