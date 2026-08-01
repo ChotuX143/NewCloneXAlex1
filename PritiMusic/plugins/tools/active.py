@@ -1,6 +1,6 @@
 """
 Active Chats Plugin for PritiMusic
-🤞 𝐏ᴏᴡєʀєᴅ 𝐁ʏ ➛ BETA BOTS.🙂❤️
+🤞 𝐏ᴏᴡєʀєᴅ 𝐁ʏ ➛ 🎵˹● 𝑻𝑶𝑴 ✘ 𝑱𝑬𝑹𝑹𝒀 𝑴𝑼𝑺𝑰𝑪 ●˼™🎵.
 """
 
 import os
@@ -23,7 +23,7 @@ from PritiMusic.utils.database import (
 )
 from PritiMusic.utils.database.clonedb import get_served_chats_clone, clonebotdb
 
-POWERED_BY = "🤞 **𝐏ᴏᴡєʀєᴅ 𝐁ʏ ➛ BETA BOTS.🙂❤️**"
+POWERED_BY = "🤞 **𝐏ᴏᴡєʀєᴅ 𝐁ʏ ➛ 🎵˹● 𝑻𝑶𝑴 ✘ 𝑱𝑬𝑹𝑹𝒀 𝑴𝑼𝑺𝑰𝑪 ●˼™🎵❤️.**"
 
 # --- DATABASE FOR TODAY'S STATS ---
 daily_statsdb = mongodb["daily_stats"]
