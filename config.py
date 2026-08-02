@@ -88,7 +88,7 @@ STRING2 = getenv("STRING_SESSION2", "")
 STRING3 = getenv("STRING_SESSION3", "")
 STRING4 = getenv("STRING_SESSION4", "")
 
-START_IMG_URL = getenv("START_IMG_URL", "https://telegra.ph/file/c316aa782ab03f45ba9c2.jpg").split()
+START_IMG_URL = getenv("START_IMG_URL", "https://files.catbox.moe/euxbyi.png").split()
 HELP_IMG_URL = getenv("HELP_IMG_URL", "https://telegra.ph/file/c316aa782ab03f45ba9c2.jpg").split()
 PING_IMG_URL = getenv("PING_IMG_URL", "https://telegra.ph/file/64dacee61bdf2365497ef.jpg").split()
 
