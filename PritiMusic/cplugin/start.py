@@ -201,7 +201,7 @@ def get_random_start_image():
         if isinstance(START_IMG_URL, list):
             return random.choice(START_IMG_URL)
         return START_IMG_URL
-    return "https://files.catbox.moe/d4yhs6.png"
+    return "https://telegra.ph/file/2e3d368e77c449c287430.jpg"
 
 def format_link(val):
     if not val or str(val).strip() in ["", "none", "None"]:
@@ -775,4 +775,3 @@ async def set_btn_pos_cmd(client, message):
         await message.reply_text(f"✅ Button Position: **{raw_pos}**")
     else:
         await message.reply_text("❌ Invalid! Use: UP, DOWN, MID")
-    
