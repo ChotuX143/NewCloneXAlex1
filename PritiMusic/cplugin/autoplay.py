@@ -18,7 +18,7 @@ from PritiMusic.utils.decorators import AdminRightsCheck
 from config import BANNED_USERS
 
 
-AUTOPLAY_BANNER = "https://files.catbox.moe/d4yhs6.png"
+AUTOPLAY_BANNER = "https://files.catbox.moe/b8lnx9.jpg"
 
 # 🔥 PREMIUM EMOJIS LIST 🔥
 PREMIUM_EMOJIS = [
