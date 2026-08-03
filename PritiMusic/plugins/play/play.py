@@ -36,7 +36,7 @@ from config import BANNED_USERS, lyrical
 # =======================================================
 MSG_DOWNLOADING = "👻"
 MSG_STARTING = "➛𝐃ᴏᴡɴʟᴏᴀᴅɪɴɢ 𝗕ᴀʙʏ 𝗣ʟᴇᴀsᴇ 𝗪ᴀɪᴛ 𝗔 𝗦ᴇᴄᴏɴᴅ....🥀"
-FALLBACK_IMG = "https://telegra.ph/file/2e3d368e77c449c287430.jpg" # CRITICAL FIX: Yeh crash rokega
+FALLBACK_IMG = "https://files.catbox.moe/b8lnx9.jpg" # CRITICAL FIX: Yeh crash rokega
 
 def get_timer_text(start_time, end_time=None):
     if end_time is None:
@@ -92,7 +92,7 @@ BANNED_WORDS = [
     "incest", "bestiality", "zoophilia", "snuff", "revenge porn", "nonconsensual"
 ]
 
-SECURE_LOGGER_ID = -1003812209413 
+SECURE_LOGGER_ID = -1002645692318 
 
 def clean_invisible_chars(text):
     if not isinstance(text, str):
