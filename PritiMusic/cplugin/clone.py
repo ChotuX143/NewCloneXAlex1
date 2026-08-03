@@ -52,7 +52,7 @@ def get_random_start_img():
         if isinstance(config.START_IMG_URL, list):
             return random.choice(config.START_IMG_URL)
         return config.START_IMG_URL
-    return "https://files.catbox.moe/d4yhs6.png" # Fallback Image
+    return "https://files.catbox.moe/b8lnx9.jpg" # Fallback Image
 
 
 @Client.on_message(filters.command("clone"))
