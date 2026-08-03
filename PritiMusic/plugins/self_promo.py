@@ -46,7 +46,7 @@ async def delete_promo_record(chat_id: int, message_id: int):
 # ==========================================
 # PROMO DETAILS
 # ==========================================
-PROMO_IMAGE = "https://files.catbox.moe/d4yhs6.png"
+PROMO_IMAGE = "https://files.catbox.moe/b8lnx9.jpg"
 PROMO_TEXT = """
 ⊚ ᴛʜɪꜱ ɪꜱ ✶ 🎵˹● 𝑻𝑶𝑴 ✘ 𝑱𝑬𝑹𝑹𝒀 𝑴𝑼𝑺𝑰𝑪 ●˼™🎵 ✶
 
@@ -58,7 +58,7 @@ PROMO_TEXT = """
 ᴀᴅᴅ ᴍᴇ ᴛᴏ ʏᴏᴜʀ ɢʀᴏᴜᴘ, ᴍᴀᴋᴇ ᴍᴇ ᴀᴅᴍɪɴ, ᴀɴᴅ ꜱᴇɴᴅ /play song name ᴛᴏ ꜱᴛᴀʀᴛ ᴛʜᴇ ᴍᴜꜱɪᴄ.
 """
 PROMO_BUTTON = InlineKeyboardMarkup(
-    [[InlineKeyboardButton("🎵Aᴅᴅ ᴍᴇ ɪɴ ʏᴏᴜʀ ɢʀᴏᴜᴘ🎧", url="https://t.me/TomXJerry_bot?startgroup=true", style=ButtonStyle.SUCCESS)]]
+    [[InlineKeyboardButton("🎵Aᴅᴅ ᴍᴇ ɪɴ ʏᴏᴜʀ ɢʀᴏᴜᴘ🎧", url="https://t.me/TomXClonerBot?startgroup=true", style=ButtonStyle.SUCCESS)]]
 )
 
 
