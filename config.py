@@ -88,7 +88,7 @@ STRING2 = getenv("STRING_SESSION2", "")
 STRING3 = getenv("STRING_SESSION3", "")
 STRING4 = getenv("STRING_SESSION4", "")
 
-START_IMG_URL = getenv("START_IMG_URL", "https://telegra.ph/file/2e3d368e77c449c287430.jpg").split()
+START_IMG_URL = getenv("START_IMG_URL", "https://files.catbox.moe/b8lnx9.jpg").split()
 HELP_IMG_URL = getenv("HELP_IMG_URL", "https://telegra.ph/file/c316aa782ab03f45ba9c2.jpg").split()
 PING_IMG_URL = getenv("PING_IMG_URL", "https://telegra.ph/file/64dacee61bdf2365497ef.jpg").split()
 
@@ -110,7 +110,7 @@ votemode = {}
 autoclean = []
 confirmer = {}
 
-START_IMG_URL = getenv("START_IMG_URL", "https://files.catbox.moe/d4yhs6.png").split()
+START_IMG_URL = getenv("START_IMG_URL", "https://files.catbox.moe/b8lnx9.jpg").split()
 
 def time_to_seconds(time):
     return sum(int(x) * 60**i for i, x in enumerate(reversed(str(time).split(":"))))
