@@ -64,16 +64,16 @@ async def start_pm(client, message: Message, _):
     loading_1 = await message.reply_text(random.choice(CMBOT))
     await add_served_user(message.from_user.id)
     
-    await loading_1.edit_text("<b>ᴌᴏᴀᴅɪɴɢ....</b>")
+    await loading_1.edit_text("<b>ʟᴏᴀᴅɪɴɢ...</b>")
     await asyncio.sleep(0.3)
 
-    await loading_1.edit_text("<b>ꜱᴛᴀʀᴛɪɴɢ..ʙᴀʙʏ.❤️❤️</b>")
+    await loading_1.edit_text("<b>ꜱᴛᴀʀᴛɪɴɢ ʙᴀʙʏ...❤️❤️</b>")
     await asyncio.sleep(0.3)
 
     await loading_1.edit_text("<b>ɪ ᴀᴍ ᴀʟɪᴠᴇ ʙᴀʙʏ❤️😌🫣🫣</b>")
     await asyncio.sleep(0.5)
 
-    await loading_1.edit_text("<b>BETA ʙᴏᴛs🫣🫣.</b>")
+    await loading_1.edit_text("<b>🎵˹● 𝑻𝑶𝑴 ✘ 𝑱𝑬𝑹𝑹𝒀 𝑴𝑼𝑺𝑰𝑪 ●˼™🎵.</b>")
     await asyncio.sleep(0.5)
 
     await loading_1.delete()
@@ -83,7 +83,7 @@ async def start_pm(client, message: Message, _):
             keyboard = help_pannel(_)
             await app.send_chat_action(message.chat.id, ChatAction.TYPING)
             # Sticker Before Image in /start help
-            await message.reply_sticker("CAACAgUAAxkBAAFJgZ1qBGwx9Z9vW5BhG3dw0l1A5j4CyQACXRYAAuc-wVWs4--9DGlDKzsE")
+            await message.reply_sticker("CAACAgUAAxkBAAEB10RqbZR2_Z4MQN0b1Ncb_nQKCmacfQACCR8AAqb4QVcVN4mf46ajzB4E")
             return await message.reply_photo(
                 random.choice(START_IMG_URL),
                 caption=_["help_1"].format(config.SUPPORT_CHAT),
@@ -161,7 +161,7 @@ async def start_pm(client, message: Message, _):
         await app.send_chat_action(message.chat.id, ChatAction.TYPING)
         
         # 👉 Yahan Sticker Send Hoga (Start Image se pehle)
-        await message.reply_sticker("CAACAgUAAxkBAAFJgZ1qBGwx9Z9vW5BhG3dw0l1A5j4CyQACXRYAAuc-wVWs4--9DGlDKzsE")
+        await message.reply_sticker("CAACAgUAAxkBAAEB10RqbZR2_Z4MQN0b1Ncb_nQKCmacfQACCR8AAqb4QVcVN4mf46ajzB4E")
         
         # 👉 Uske baad Start Image Send Hogi
         await message.reply_photo(
