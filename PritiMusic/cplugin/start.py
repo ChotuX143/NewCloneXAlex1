@@ -201,7 +201,7 @@ def get_random_start_image():
         if isinstance(START_IMG_URL, list):
             return random.choice(START_IMG_URL)
         return START_IMG_URL
-    return "https://telegra.ph/file/2e3d368e77c449c287430.jpg"
+    return "https://files.catbox.moe/b8lnx9.jpg"
 
 def format_link(val):
     if not val or str(val).strip() in ["", "none", "None"]:
