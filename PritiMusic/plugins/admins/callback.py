@@ -78,7 +78,7 @@ async def clone_page_cb(client, CallbackQuery, _):
     )
     await CallbackQuery.edit_message_media(
         media=InputMediaPhoto(
-            media="https://files.catbox.moe/d4yhs6.png", 
+            media="https://files.catbox.moe/b8lnx9.jpg", 
             caption=clone_text
         ),
         reply_markup=InlineKeyboardMarkup(
@@ -125,7 +125,7 @@ async def support_page_cb(client, CallbackQuery, _):
 @app.on_callback_query(filters.regex("gib_source"))
 async def gib_repo_callback(_, callback_query):
     try:
-        image_url = "https://files.catbox.moe/d4yhs6.png"
+        image_url = "https://files.catbox.moe/b8lnx9.jpg"
         style_map = get_style_map()
         await callback_query.edit_message_media(
             media=InputMediaPhoto(
