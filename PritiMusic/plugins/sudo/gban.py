@@ -26,7 +26,7 @@ def get_random_gban_img():
         if isinstance(START_IMG_URL, list):
             return random.choice(START_IMG_URL)
         return START_IMG_URL
-    return "https://files.catbox.moe/d4yhs6.png" # Fallback
+    return "https://files.catbox.moe/b8lnx9.jpg" # Fallback
 
 @app.on_message(filters.command(["gban", "globalban"]) & SUDOERS)
 @language
