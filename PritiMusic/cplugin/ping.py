@@ -25,7 +25,7 @@ def get_random_ping_img():
         if isinstance(PING_IMG_URL, list):
             return random.choice(PING_IMG_URL)
         return PING_IMG_URL
-    return "https://files.catbox.moe/d4yhs6.png"
+    return "https://files.catbox.moe/b8lnx9.jpg"
 
 async def get_ping_image(bot_id: int):
     d = await clonebotdb.find_one({"bot_id": bot_id}) or {}
