@@ -205,7 +205,7 @@ def get_random_img(img_list):
         if isinstance(img_list, list):
             return random.choice(img_list)
         return img_list
-    return "https://files.catbox.moe/d4yhs6.png"
+    return "https://files.catbox.moe/b8lnx9.jpg"
 
 def clean_youtube_url(url):
     if not isinstance(url, str): return url, None, "unknown"
@@ -666,7 +666,7 @@ async def play_commnd(client, message: Message, _, chat_id, video, channel, play
             buttons = InlineKeyboardMarkup(
                 [[InlineKeyboardButton(text="Support", url=C_SUPPORT_CHAT), InlineKeyboardButton(text="Close", callback_data="close")]]
             )
-            play_img = get_random_img(config.PLAYLIST_IMG_URL) if hasattr(config, "PLAYLIST_IMG_URL") else "https://files.catbox.moe/d4yhs6.png"
+            play_img = get_random_img(config.PLAYLIST_IMG_URL) if hasattr(config, "PLAYLIST_IMG_URL") else "https://files.catbox.moe/b8lnx9.jpg"
             try:
                 if stype == "photo" and scontent:
                      play_img = scontent
