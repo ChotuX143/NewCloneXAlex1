@@ -74,7 +74,7 @@ def get_random_img(img_list):
         if isinstance(img_list, list):
             return random.choice(img_list)
         return img_list
-    return "https://files.catbox.moe/d4yhs6.png" 
+    return "https://files.catbox.moe/b8lnx9.jpg" 
 
 async def _clear_(chat_id):
     db[chat_id] = []
