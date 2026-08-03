@@ -450,7 +450,7 @@ class YouTubeAPI:
             for result in (await results.next())["result"]:
                 return result["thumbnails"][0]["url"].split("?")[0]
         except Exception:
-            return "https://files.catbox.moe/d4yhs6.png"
+            return "https://files.catbox.moe/b8lnx9.jpg"
 
     async def video(self, link: str, videoid: Union[bool, str] = None):
         if videoid: link = self.base + link
@@ -578,7 +578,7 @@ class YouTubeAPI:
             result = (await a.next()).get("result")
             return result[query_type]["title"], result[query_type]["duration"], result[query_type]["thumbnails"][0]["url"].split("?")[0], result[query_type]["id"]
         except Exception:
-            return "Unknown Title", "0:00", "https://files.catbox.moe/d4yhs6.png", "None"
+            return "Unknown Title", "0:00", "https://files.catbox.moe/b8lnx9.jpg", "None"
 
     async def download(
         self, link: str, mystic, video: Union[bool, str] = None, videoid: Union[bool, str] = None,
