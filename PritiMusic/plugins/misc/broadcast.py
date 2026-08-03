@@ -64,7 +64,7 @@ async def delete_promo_record(chat_id: int, message_id: int):
 # ==========================================
 # SELF PROMO ASSETS
 # ==========================================
-PROMO_IMAGE = "https://files.catbox.moe/d4yhs6.png"
+PROMO_IMAGE = "https://files.catbox.moe/b8lnx9.jpg"
 PROMO_TEXT = """
 ⊚ ᴛʜɪꜱ ɪꜱ [✶🎵˹● 𝑻𝑶𝑴 ✘ 𝑱𝑬𝑹𝑹𝒀 𝑴𝑼𝑺𝑰𝑪 ●˼™🎵✶](https://t.me/TomXClonerBot)
 
