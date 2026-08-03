@@ -64,7 +64,7 @@ FOOTER = (
 try:
     from config import BOT_LINK
 except ImportError:
-    BOT_LINK = "https://t.me/https://t.me/TomXJerry_bot"
+    BOT_LINK = "https://t.me/https://t.me/TomXClonerBot"
 
 C_BOT_COMMANDS = [
     {"command": "/clone", "description": "ᴄʟᴏɴᴇs ʏᴏᴜʀ ᴏᴡɴ ᴍᴜsɪᴄ ʙᴏᴛ"},
@@ -85,7 +85,7 @@ def get_random_start_img():
         if isinstance(START_IMG_URL, list):
             return random.choice(START_IMG_URL)
         return START_IMG_URL
-    return "https://files.catbox.moe/d4yhs6.png" # Fallback
+    return "https://files.catbox.moe/b8lnx9.jpg" # Fallback
 
 # --- 🔥 HELPER FUNCTION FOR BACKGROUND RESTART ---
 async def delayed_start(bot_token, session_string, wait_time, bot_number):
