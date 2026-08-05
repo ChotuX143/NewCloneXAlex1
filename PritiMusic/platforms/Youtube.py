@@ -15,9 +15,9 @@ from youtubesearchpython.__future__ import VideosSearch, Playlist
 DOWNLOAD_DIR = "downloads"
 LOGGER = logging.getLogger(__name__)
 
-# 🟢 ONLY INFLEX API (No Fallbacks, No Shruti)
-API_URL = "https://teaminflex.xyz"  
-API_KEY = "INFLEX28503328D"
+# Primary Inflex API
+API_URL = os.environ.get("INFLEX_API_URL", "https://teaminflex.xyz")
+API_KEY = os.environ.get("INFLEX_API_KEY", "INFLEX28503328D")
 
 def time_to_seconds(time_str):
     stringt = str(time_str)
@@ -28,10 +28,12 @@ def get_safe_filename(title: str, default_id: str) -> str:
         return default_id
     return re.sub(r'[\\/*?:"<>|]', "", title).strip()
 
-# Secure YouTube ID Extractor to prevent SSRF
+# Secure YouTube ID Extractor (Sirf Link ke liye)
 def extract_video_id(link: str) -> str:
-    match = re.search(r"(?:v=|\/)([0-9A-Za-z_-]{11})(?:\&|\?|$)", link)
-    return match.group(1) if match else None
+    if "youtube.com" in link or "youtu.be" in link:
+        match = re.search(r"(?:v=|\/)([0-9A-Za-z_-]{11})(?:\&|\?|$)", link)
+        return match.group(1) if match else None
+    return None
 
 # Helper for Safe Async Execution
 async def _async_run(func, *args, **kwargs):
@@ -41,7 +43,7 @@ async def _async_run(func, *args, **kwargs):
         loop = asyncio.get_event_loop()
     return await loop.run_in_executor(None, lambda: func(*args, **kwargs))
 
-# ----------------- INFLEX DOWNLOADER -----------------
+# ----------------- DOWNLOADERS -----------------
 
 async def api_download(video_id: str, download_type: str, title: str = None) -> str:
     if not API_URL or not API_KEY or not video_id:
@@ -52,7 +54,6 @@ async def api_download(video_id: str, download_type: str, title: str = None) -> 
     ext = "mp4" if download_type == "video" else "mp3"
     file_path = os.path.join(DOWNLOAD_DIR, f"{filename}.{ext}")
 
-    # Check size > 50000 bytes (50KB) to ignore fake HTML error files
     if os.path.exists(file_path) and os.path.getsize(file_path) > 50000:
         return file_path
 
@@ -85,43 +86,44 @@ async def api_download(video_id: str, download_type: str, title: str = None) -> 
         return None
 
 async def download_song(link: str, title: str = None) -> str:
-    video_id = extract_video_id(link)
-    if not video_id:
-        LOGGER.warning("🔴 Security: Ignored non-YouTube or Malicious URL.")
-        return None
-
-    if not title:
+    vid_id = extract_video_id(link)
+    
+    # Agar Link nahi tha (sirf Gaane ka naam tha), toh ID search karega
+    if not vid_id:
         try:
-            search = VideosSearch(video_id, limit=1)
+            search = VideosSearch(link, limit=1)
             res = await search.next()
             if res and res.get("result"):
+                vid_id = res["result"][0]["id"]
                 title = res["result"][0]["title"]
         except Exception:
             pass
 
-    # Direct API Download (No Fallbacks)
-    return await api_download(video_id, "audio", title)
+    if not vid_id:
+        LOGGER.warning("🔴 Could not find video ID for query.")
+        return None
+
+    return await api_download(vid_id, "audio", title)
 
 async def download_video(link: str, title: str = None) -> str:
-    video_id = extract_video_id(link)
-    if not video_id:
-        LOGGER.warning("🔴 Security: Ignored non-YouTube or Malicious URL.")
-        return None
-
-    if not title:
+    vid_id = extract_video_id(link)
+    
+    if not vid_id:
         try:
-            search = VideosSearch(video_id, limit=1)
+            search = VideosSearch(link, limit=1)
             res = await search.next()
             if res and res.get("result"):
+                vid_id = res["result"][0]["id"]
                 title = res["result"][0]["title"]
         except Exception:
             pass
 
-    # Direct API Download (No Fallbacks)
-    return await api_download(video_id, "video", title)
+    if not vid_id:
+        LOGGER.warning("🔴 Could not find video ID for query.")
+        return None
 
-
-# ----------------- YOUTUBE API CLASS -----------------
+    return await api_download(vid_id, "video", title)
+    # ----------------- YOUTUBE API CLASS -----------------
 
 class YouTubeAPI:
     def __init__(self):
@@ -156,13 +158,17 @@ class YouTubeAPI:
 
     async def details(self, link: str, videoid: Union[bool, str] = None):
         link = self._clean(link, videoid)
-        vid_id = extract_video_id(link)
-        if not vid_id: return None, None, None, None, None
         
-        safe_link = f"https://www.youtube.com/watch?v={vid_id}"
+        # Link check for Security
+        if "youtube.com" in link or "youtu.be" in link:
+            vid_id = extract_video_id(link)
+            if not vid_id: return None, None, None, None, None
+            safe_query = f"https://www.youtube.com/watch?v={vid_id}"
+        else:
+            safe_query = link # Gaane ka Naam
 
         try:
-            results = VideosSearch(safe_link, limit=1)
+            results = VideosSearch(safe_query, limit=1)
             response = await results.next()
             if response and response.get("result"):
                 for result in response["result"]:
@@ -185,7 +191,7 @@ class YouTubeAPI:
             } 
             ydl = yt_dlp.YoutubeDL(ydl_opts)
 
-            r = await _async_run(ydl.extract_info, safe_link, download=False)
+            r = await _async_run(ydl.extract_info, f"ytsearch1:{safe_query}" if not safe_query.startswith("http") else safe_query, download=False)
             if r and "entries" in r and len(r["entries"]) > 0:
                 entry = r["entries"][0]
                 title = entry.get("title")
@@ -257,13 +263,7 @@ class YouTubeAPI:
             "quiet": True,
             "cookiefile": "cookies.txt", 
             "extractor_args": {"youtube": ["player_client=ios,tv_embedded"]},
-            "external_downloader": "aria2c",
-            "external_downloader_args": [
-                "-x", "16",            
-                "-s", "16",            
-                "-k", "1M",            
-                "--allow-piece-length-change=true"
-            ]
+            "external_downloader": "aria2c"
         }
 
         ydl = yt_dlp.YoutubeDL(ytdl_opts)
@@ -392,4 +392,4 @@ class YouTubeAPI:
             return None
 
 YouTube = YouTubeAPI()
-            
+    
