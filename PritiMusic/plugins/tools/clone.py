@@ -64,7 +64,7 @@ FOOTER = (
 try:
     from config import BOT_LINK
 except ImportError:
-    BOT_LINK = "https://t.me/https://t.me/TomXClonerBot"
+    BOT_LINK = "https://t.me/TomXClonerBot"
 
 C_BOT_COMMANDS = [
     {"command": "/clone", "description": "ᴄʟᴏɴᴇs ʏᴏᴜʀ ᴏᴡɴ ᴍᴜsɪᴄ ʙᴏᴛ"},
