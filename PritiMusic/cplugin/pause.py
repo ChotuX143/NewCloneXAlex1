@@ -1,20 +1,17 @@
 import random
-import asyncio
 from pyrogram import filters, Client
 from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
-from pyrogram.enums import ChatMemberStatus # 🟢 ZAROORI IMPORT
+from pyrogram.enums import ChatMemberStatus
 
-import config # 🟢 ZAROORI IMPORT
+import config
 from PritiMusic import app
 from PritiMusic.core.call import Lucky
-from PritiMusic.utils.database import is_music_playing, music_off # 🟢 is_music_playing ADD KIYA
+from PritiMusic.utils.database import is_music_playing, music_off
+from PritiMusic.utils.decorators import AdminRightsCheck # 🟢 Shukla style import
 from config import BANNED_USERS
 
 # ✅ Kurigram Button Style Import
 from button import ButtonStyle
-
-# ✅ IMPORT NEW ADMIN CHECKER
-from PritiMusic.cplugin.utils.decorators.admins import AdminRightsCheck
 
 # ==========================================
 # 🔥 PREMIUM EMOJIS & SMART BUTTON HELPER
@@ -40,11 +37,11 @@ def action_btn(text, callback_data=None, url=None, style=ButtonStyle.PRIMARY, us
 # 🛑 PAUSE COMMAND EXECUTION
 # ==========================================
 
-@Client.on_message(filters.command(["pause", "cpause"]) & filters.group & ~BANNED_USERS)
+@app.on_message(filters.command(["pause", "cpause"]) & filters.group & ~BANNED_USERS)
 @AdminRightsCheck 
-async def pause_admin(cli: Client, message: Message, _, chat_id):
+async def pause_admin(cli, message: Message, _, chat_id):
     
-    # 🟢 THE FIX 1: BULLETPROOF ADMIN CHECK (Wapas lagaya gaya)
+    # 🟢 BULLETPROOF ADMIN CHECK (Double Verification)
     if message.from_user.id not in config.SUDOERS:
         try:
             member = await cli.get_chat_member(chat_id, message.from_user.id)
@@ -53,7 +50,7 @@ async def pause_admin(cli: Client, message: Message, _, chat_id):
         except Exception:
             return await message.reply_text("❌ **Error: Admin rights verify nahi ho paye.**")
 
-    # 🟢 THE FIX 2: CHECK KARO KI KYA MUSIC CHAL BHI RAHA HAI?
+    # 🟢 CHECK KARO KI KYA MUSIC CHAL BHI RAHA HAI?
     if not await is_music_playing(chat_id):
         return await message.reply_text(_["admin_1"])
 
@@ -79,3 +76,4 @@ async def pause_admin(cli: Client, message: Message, _, chat_id):
         _["admin_2"].format(message.from_user.mention),
         reply_markup=InlineKeyboardMarkup(buttons),
     )
+    
