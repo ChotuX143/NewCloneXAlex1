@@ -4,18 +4,15 @@ from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
 from pyrogram.enums import ChatMemberStatus
 
 import config
-from PritiMusic import app
 from PritiMusic.core.call import Lucky
 from PritiMusic.utils.database import is_music_playing, music_off
-from PritiMusic.utils.decorators import AdminRightsCheck # 🟢 Shukla style import
+# 🟢 Clone bot ka decorator import
+from PritiMusic.cplugin.utils.decorators.admins import AdminRightsCheck 
 from config import BANNED_USERS
 
 # ✅ Kurigram Button Style Import
 from button import ButtonStyle
 
-# ==========================================
-# 🔥 PREMIUM EMOJIS & SMART BUTTON HELPER
-# ==========================================
 PREMIUM_EMOJIS = [
     "5422831825178206894", 
     "5368324170673489600",
@@ -33,15 +30,12 @@ def action_btn(text, callback_data=None, url=None, style=ButtonStyle.PRIMARY, us
         kwargs["icon_custom_emoji_id"] = random.choice(PREMIUM_EMOJIS)
     return InlineKeyboardButton(**kwargs)
 
-# ==========================================
-# 🛑 PAUSE COMMAND EXECUTION
-# ==========================================
 
-@app.on_message(filters.command(["pause", "cpause"]) & filters.group & ~BANNED_USERS)
+# 🟢 @Client use kiya hai taki har clone bot isey run kar sake
+@Client.on_message(filters.command(["pause", "cpause"]) & filters.group & ~BANNED_USERS)
 @AdminRightsCheck 
-async def pause_admin(cli, message: Message, _, chat_id):
+async def pause_admin(cli: Client, message: Message, _, chat_id):
     
-    # 🟢 BULLETPROOF ADMIN CHECK (Double Verification)
     if message.from_user.id not in config.SUDOERS:
         try:
             member = await cli.get_chat_member(chat_id, message.from_user.id)
@@ -50,17 +44,12 @@ async def pause_admin(cli, message: Message, _, chat_id):
         except Exception:
             return await message.reply_text("❌ **Error: Admin rights verify nahi ho paye.**")
 
-    # 🟢 CHECK KARO KI KYA MUSIC CHAL BHI RAHA HAI?
     if not await is_music_playing(chat_id):
         return await message.reply_text(_["admin_1"])
 
-    # 1. Database mein music off mark karein
     await music_off(chat_id)
-    
-    # 2. Call module ka use karke stream pause karein
     await Lucky.pause_stream(chat_id)
 
-    # 3. Inline Buttons setup with Kurigram Styles
     buttons = [
         [
             action_btn("ʀᴇsᴜᴍᴇ ▷", callback_data=f"ADMIN Resume|{chat_id}", style=ButtonStyle.SUCCESS),
@@ -71,7 +60,6 @@ async def pause_admin(cli, message: Message, _, chat_id):
         ],
     ]
 
-    # 4. Reply message
     await message.reply_text(
         _["admin_2"].format(message.from_user.mention),
         reply_markup=InlineKeyboardMarkup(buttons),
